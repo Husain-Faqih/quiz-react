@@ -1,22 +1,31 @@
 function Result({ score, totalQuestions, onViewLeaderboard, onReset }) {
+  const percentage = (score / totalQuestions) * 100;
+  const getFeedbackMessage = () => {
+    if (percentage === 100) return " ✨ Luar biasa! Kamu dapat nilai sempurna!";
+    if (percentage === 75)
+      return " 👏 Kerja bagus! Hasil yang sangat memuaskan!";
+    if (percentage === 50) return " 👍 Lumayan! Masih bisa di tingkatkan lagi!";
+    return "💡 Jangan menyerah! Coba latihan lagi.";
+  };
   return (
-    <div className="quiz-container result-container">
+    <div className="quiz-container">
       <h1 className="quiz-title">🎉 Quiz Selesai!</h1>
-      <h2 className="final-score">
-        Skor Kamu: {score} /{totalQuestions}
-      </h2>
+      <div className="result-score-box">
+        <h2 className="final-score">
+          Skor Kamu: <span>{score}</span> / {totalQuestions}
+        </h2>
+        <p className="feedback-message">{getFeedbackMessage()}</p>
+      </div>
 
-      <button className="nex-button" onClick={onViewLeaderboard}>
-        🏆 Lihat Leaderboard
-      </button>
+      <div className="action-buttons">
+        <button className="main-btn" onClick={onViewLeaderboard}>
+          🏆 Lihat Leaderboard
+        </button>
 
-      <button
-        className="btn"
-        style={{ background: "#331455" }}
-        onClick={onReset}
-      >
-        Atur Quiz Baru
-      </button>
+        <button className="secondary-btn" onClick={onReset}>
+          Atur Quiz Baru
+        </button>
+      </div>
     </div>
   );
 }

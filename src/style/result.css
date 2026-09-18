@@ -1,0 +1,24 @@
+.result-score-box {
+    text-align: center;
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    margin: 20px 0 20px 0;
+}
+
+.final-score {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 8px;
+}
+
+.final-score span {
+    color: #6366f1;
+}
+
+.feedback-message {
+    font-size: 15px;
+    color: #cdb5e1;
+}

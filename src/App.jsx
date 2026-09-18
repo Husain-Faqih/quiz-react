@@ -1,20 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Settings from "./components/Settings";
+import QuestionCard from "./components/QuestionCard";
+import Leaderboard from "./components/Leaderboard";
+import Result from "./components/Result";
 
-const decodeHTML = (text) => {
-  const textarea = document.createElement("textarea");
-  textarea.innerHTML = text;
-  return textarea.value;
-};
-
-const shuffleArray = (array) => {
-  return [...array].sort(() => Math.random() - 0.5);
-};
+const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 
 function App() {
   const [amount, setAmount] = useState("10");
   const [difficulty, setDifficulty] = useState("easy");
   const [category, setCategory] = useState("");
-  const [isStarted, setIsStarted] = useState(false);
+
+  // Kontrol tampilan halaman: "settings" | "quiz" | "result" | "leaderboard"
+  const [viewState, setViewState] = useState("settings");
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -23,6 +21,32 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);
+
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    const savedHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
+    setHistory(savedHistory);
+  }, []);
+
+  const saveHistory = (finalScore, totalQuestions) => {
+    const existingHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
+    const newEntry = {
+      score: `${finalScore}/${totalQuestions}`,
+      rawScore: finalScore,
+      difficulty: difficulty || "Semua",
+      category: category || "Semua",
+      date: new Date().toLocaleString("id-ID"),
+    };
+    const updatedHistory = [...existingHistory, newEntry];
+    localStorage.setItem("riwayat", JSON.stringify(updatedHistory));
+    setHistory(updatedHistory);
+  };
+
+  const handleClearHistory = () => {
+    localStorage.removeItem("riwayat");
+    setHistory([]);
+  };
 
   const fetchQuestions = () => {
     setLoading(true);
@@ -33,39 +57,52 @@ function App() {
     if (category) url += `&category=${category}`;
 
     fetch(url)
-      .then((response) => {
-        if (!response.ok) throw new Error("Gagal terhubung ke server");
-        return response.json();
+      .then((res) => {
+        if (!res.ok) throw new Error("Gagal terhubung ke server");
+        return res.json();
       })
       .then((data) => {
-        if (data.response_code !== 0)
-          throw new Error("Gagal memuat soal dari API");
-        const formattedQuestions = data.results.map((q) => {
-          const allAnswers = [q.correct_answer, ...q.incorrect_answers];
-          return {
-            ...q,
-            shuffledAnswers: shuffleArray(allAnswers),
-          };
-        });
-
-        setQuestions(formattedQuestions);
+        if (data.response_code !== 0) throw new Error("Gagal memuat soal");
+        const formatted = data.results.map((q) => ({
+          ...q,
+          shuffledAnswers: shuffleArray([
+            q.correct_answer,
+            ...q.incorrect_answers,
+          ]),
+        }));
+        setQuestions(formatted);
         setCurrentIndex(0);
         setSelectedAnswer(null);
         setScore(0);
-        setIsStarted(true);
+        setViewState("quiz");
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   };
 
-  const handleResetToSettings = () => {
-    setIsStarted(false);
-    setQuestions([]);
+  const handleAnswer = (answer) => {
+    setSelectedAnswer(answer);
+    const isCorrect = answer === questions[currentIndex].correct_answer;
+    const newScore = isCorrect ? score + 1 : score;
+
+    if (isCorrect) setScore(newScore);
+
+    if (currentIndex === questions.length - 1) {
+      saveHistory(newScore, questions.length);
+    }
+  };
+
+  const handleNextQuestion = () => {
+    if (currentIndex < questions.length - 1) {
+      setSelectedAnswer(null);
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setViewState("result");
+    }
   };
 
   if (loading) return <h1>⏳ Memuat soal...</h1>;
-
-  if (error) {
+  if (error)
     return (
       <div>
         <h1>❌ Gagal memuat soal</h1>
@@ -75,124 +112,52 @@ function App() {
         </button>
       </div>
     );
-  }
 
-  if (!isStarted) {
+  if (viewState === "settings") {
     return (
-      <div className="quiz-container">
-        <h1 className="quiz-title">Pengaturan  Quiz</h1>
-
-        <div className="settings-form">
-          <label>Jumlah Soal:</label>
-          <select value={amount} onChange={(e) => setAmount(e.target.value)}>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-          </select>
-
-          <label>Tingkat Kesulitan:</label>
-          <select
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-          >
-            <option value="">Semua Kesulitan</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-
-          <label>Kategori:</label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="">Semua Kategori</option>
-            <option value="9">General Knowledge</option>
-            <option value="17">Science & Nature</option>
-            <option value="21">Sports</option>
-            <option value="11">Film</option>
-          </select>
-
-          <button className="next-button" onClick={fetchQuestions}>
-            Mulai
-          </button>
-        </div>
-      </div>
+      <Settings
+        amount={amount}
+        setAmount={setAmount}
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        category={category}
+        setCategory={setCategory}
+        onStart={fetchQuestions}
+        onViewLeaderboard={() => setViewState("leaderboard")}
+      />
     );
   }
 
-  if (currentIndex >= questions.length) {
+  if (viewState === "leaderboard") {
     return (
-      <div className="quiz-container result-container">
-        <h1 className="quiz-title">🎉 Quiz Selesai!</h1>
-        <h2 className="final-score">
-          Skor kamu: {score} / {questions.length}
-        </h2>
-        <button className="next-button" onClick={handleResetToSettings}>
-          Atur Quiz Baru
-        </button>
-      </div>
+      <Leaderboard
+        history={history}
+        onClearHistory={handleClearHistory}
+        onBack={() => setViewState("settings")}
+      />
     );
   }
 
-  const currentQuestion = questions[currentIndex];
-  const isCorrect = selectedAnswer === currentQuestion.correct_answer;
-
-  const handleAnswer = (answer) => {
-    setSelectedAnswer(answer);
-    if (answer === currentQuestion.correct_answer) {
-      setScore(score + 1);
-    }
-  };
-
-  const handleNextQuestion = () => {
-    setSelectedAnswer(null);
-    setCurrentIndex(currentIndex + 1);
-  };
+  if (viewState === "result") {
+    return (
+      <Result
+        score={score}
+        totalQuestions={questions.length}
+        onViewLeaderboard={() => setViewState("leaderboard")}
+        onReset={() => setViewState("settings")}
+      />
+    );
+  }
 
   return (
-    <div className="quiz-container">
-      <h1 className="quiz-title">Trivia Quiz</h1>
-      <p className="question-number">
-        Soal {currentIndex + 1} / {questions.length}
-      </p>
-
-      <h2 className="question">{decodeHTML(currentQuestion.question)}</h2>
-
-      <div className="answers">
-        {currentQuestion.shuffledAnswers.map((answer, index) => (
-          <button
-            key={index}
-            onClick={() => handleAnswer(answer)}
-            disabled={selectedAnswer !== null}
-            className={
-              selectedAnswer !== null
-                ? answer === currentQuestion.correct_answer
-                  ? "correct"
-                  : answer === selectedAnswer
-                    ? "wrong"
-                    : ""
-                : ""
-            }
-          >
-            {decodeHTML(answer)}
-          </button>
-        ))}
-      </div>
-
-      {selectedAnswer && (
-        <p className={isCorrect ? "result correct-text" : "result wrong-text"}>
-          {isCorrect ? "🟢 Jawaban benar!" : "🔴 Jawaban salah!"}
-        </p>
-      )}
-
-      {selectedAnswer && (
-        <button className="next-button" onClick={handleNextQuestion}>
-          Next
-        </button>
-      )}
-    </div>
+    <QuestionCard
+      currentQuestion={questions[currentIndex]}
+      currentIndex={currentIndex}
+      totalQuestions={questions.length}
+      selectedAnswer={selectedAnswer}
+      onAnswer={handleAnswer}
+      onNext={handleNextQuestion}
+    />
   );
 }
 

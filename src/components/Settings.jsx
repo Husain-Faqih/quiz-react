@@ -8,49 +8,77 @@ function Settings({
   onStart,
   onViewLeaderboard,
 }) {
+  const amountOptions = ["5", "10", "15", "20"];
+  const difficultyOptions = [
+    { label: "Semua", value: "" },
+    { label: "Easy", value: "easy" },
+    { label: "Medium", value: "medium" },
+    { label: "Hard", value: "hard" },
+  ];
+
   return (
     <div className="quiz-container">
-      <h1 className="quiz-title">Pengaturan Quiz</h1>
+      <h1 className="quiz-title">🎮 Pengaturan Quiz</h1>
+
       <div className="settings-form">
-        <label>Jumlah Soal:</label>
-        <select value={amount} onChange={(e) => setAmount(e.target.value)}>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-        </select>
+        {/* Option Jumlah Soal (Pill Button) */}
+        <div className="input-group">
+          <label>🎯 Jumlah Soal</label>
+          <div className="pill-group">
+            {amountOptions.map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                className={`pill-btn ${amount === opt ? "active" : ""}`}
+                onClick={() => setAmount(opt)}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        <label>Tingkat Kesulitan:</label>
-        <select
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-        >
-          <option value="">Semua Kesulitan</option>
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
+        {/* Option Kesulitan (Pill Button) */}
+        <div className="input-group">
+          <label>⚡ Tingkat Kesulitan</label>
+          <div className="pill-group">
+            {difficultyOptions.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                className={`pill-btn ${difficulty === opt.value ? "active" : ""}`}
+                onClick={() => setDifficulty(opt.value)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        <label>Kategori:</label>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="">Semua Kategori</option>
-          <option value="9">General Knowledge</option>
-          <option value="17">Science & Nature</option>
-          <option value="21">Sports</option>
-          <option value="11">Film</option>
-        </select>
+        {/* Option Kategori (Custom Select) */}
+        <div className="input-group">
+          <label>📚 Kategori</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">Semua Kategori</option>
+            <option value="9">General Knowledge</option>
+            <option value="17">Science & Nature</option>
+            <option value="21">Sports</option>
+            <option value="11">Film</option>
+          </select>
+        </div>
 
-        <button className="next-button" onClick={onStart}>
-          Mulai
-        </button>
-
-        <button
-          className="btn"
-          style={{ background: "#331455" }}
-          onClick={onViewLeaderboard}
-        >
-          🏆 Lihat Leaderboard
-        </button>
+        {/* Action Buttons */}
+        <div className="action-buttons">
+          <button className="next-button main-btn" onClick={onStart}>
+            🚀 Mulai Kuis
+          </button>
+          <button className="secondary-btn" onClick={onViewLeaderboard}>
+            🏆 Lihat Leaderboard
+          </button>
+        </div>
       </div>
     </div>
   );

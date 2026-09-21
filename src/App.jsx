@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Settings from "./components/Settings";
 import QuestionCard from "./components/QuestionCard";
 import Leaderboard from "./components/Leaderboard";
@@ -7,12 +8,10 @@ import Result from "./components/Result";
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 
 function App() {
+  const navigate = useNavigate();
   const [amount, setAmount] = useState("10");
   const [difficulty, setDifficulty] = useState("easy");
   const [category, setCategory] = useState("");
-
-  // Kontrol tampilan halaman: "settings" | "quiz" | "result" | "leaderboard"
-  const [viewState, setViewState] = useState("settings");
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -74,7 +73,7 @@ function App() {
         setCurrentIndex(0);
         setSelectedAnswer(null);
         setScore(0);
-        setViewState("quiz");
+        navigate("/quiz");
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
@@ -97,7 +96,7 @@ function App() {
       setSelectedAnswer(null);
       setCurrentIndex(currentIndex + 1);
     } else {
-      setViewState("result");
+      navigate("/result");
     }
   };
 
@@ -113,51 +112,58 @@ function App() {
       </div>
     );
 
-  if (viewState === "settings") {
-    return (
-      <Settings
-        amount={amount}
-        setAmount={setAmount}
-        difficulty={difficulty}
-        setDifficulty={setDifficulty}
-        category={category}
-        setCategory={setCategory}
-        onStart={fetchQuestions}
-        onViewLeaderboard={() => setViewState("leaderboard")}
-      />
-    );
-  }
-
-  if (viewState === "leaderboard") {
-    return (
-      <Leaderboard
-        history={history}
-        onClearHistory={handleClearHistory}
-        onBack={() => setViewState("settings")}
-      />
-    );
-  }
-
-  if (viewState === "result") {
-    return (
-      <Result
-        score={score}
-        totalQuestions={questions.length}
-        onViewLeaderboard={() => setViewState("leaderboard")}
-        onReset={() => setViewState("settings")}
-      />
-    );
-  }
-
   return (
-    <QuestionCard
-      currentQuestion={questions[currentIndex]}
-      currentIndex={currentIndex}
-      totalQuestions={questions.length}
-      selectedAnswer={selectedAnswer}
-      onAnswer={handleAnswer}
-      onNext={handleNextQuestion}
-    />
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Settings
+            amount={amount}
+            setAmount={setAmount}
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+            category={category}
+            setCategory={setCategory}
+            onStart={fetchQuestions}
+            onViewLeaderboard={() => navigate("/leaderboard")}
+          />
+        }
+      />
+      <Route
+        path="/quiz"
+        element={
+          <QuestionCard
+            currentQuestion={questions[currentIndex]}
+            currentIndex={currentIndex}
+            totalQuestions={questions.length}
+            selectedAnswer={selectedAnswer}
+            onAnswer={handleAnswer}
+            onNext={handleNextQuestion}
+          />
+        }
+      />
+      <Route
+        path="/leaderboard"
+        element={
+          <Leaderboard
+            history={history}
+            onClearHistory={handleClearHistory}
+            onBack={() => navigate("/")}
+          />
+        }
+      />
+      <Route
+        path="/result"
+        element={
+          <Result
+            score={score}
+            totalQuestions={questions.length}
+            onViewLeaderboard={() => navigate("/leaderboard")}
+            onReset={() => navigate("/")}
+          />
+        }
+      />
+    </Routes>
   );
 }
 

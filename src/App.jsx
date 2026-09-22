@@ -4,6 +4,7 @@ import Settings from "./components/Settings";
 import QuestionCard from "./components/QuestionCard";
 import Leaderboard from "./components/Leaderboard";
 import Result from "./components/Result";
+import NotFound from "./components/NotFound";
 
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 
@@ -144,6 +145,7 @@ function App() {
           />
         }
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

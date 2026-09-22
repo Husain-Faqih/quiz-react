@@ -17,6 +17,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);
   const [history, setHistory] = useState([]);
 
@@ -44,6 +45,14 @@ function App() {
     setHistory([]);
   };
 
+  const handleAnswer = (answer, currentQuestion) => {
+    setSelectedAnswer(answer);
+    const isCorrect = answer === currentQuestion.correct_answer;
+    if (isCorrect) {
+      setScore((prevScore) => prevScore + 1);
+    }
+  };
+
   const fetchQuestions = () => {
     setLoading(true);
     setError("");
@@ -68,6 +77,7 @@ function App() {
         }));
         setQuestions(formatted);
         setScore(0);
+        setSelectedAnswer(null);
         navigate("/quiz/1");
       })
       .catch((err) => setError(err.message))
@@ -108,6 +118,9 @@ function App() {
         element={
           <QuestionCard
             questions={questions}
+            selectedAnswer={selectedAnswer}
+            setSelectedAnswer={setSelectedAnswer}
+            onAnswer={handleAnswer}
             score={score}
             setScore={setScore}
             onSaveHistory={saveHistory}

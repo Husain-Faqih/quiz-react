@@ -1,3 +1,5 @@
+import { useParams, useNavigate } from "react-router-dom";
+
 const decodeHTML = (text) => {
   const textarea = document.createElement("textarea");
   textarea.innerHTML = text;
@@ -12,9 +14,37 @@ function QuestionCard({
   onAnswer,
   onNext,
 }) {
-  const isCorrect = selectedAnswer === currentQuestion.correct_answer;
-  const progressPrecentage = ((currentIndex + 1) / totalQuestions) * 100;
+  const { number } = useParams();
+  const navigate = useNavigate();
+  const currentIndex = parseInt(number, 10) - 1;
+  const currentQuestion = questions[currentIndex];
+  const totalQuestions = questions.length;
 
+  if (!currentQuestion) {
+    return (
+      <div className="quiz-container">
+        <h2>Soal tidak ditemukan!</h2>
+        <button className="main-btn" onClick={() => navigate("/")}>
+          Kembali ke pengaturan
+        </button>
+      </div>
+    );
+  }
+
+  const isCorrect = selectedAnswer === currentQuestion.correct_answer;
+  const progressPercentage = ((currentIndex + 1) / totalQuestions) * 100;
+
+  const handleNext = () => {
+    selectedAnswer(null);
+    const nextNumber = parseInt(number, 10) + 1;
+
+    if (nextNumber <= totalQuestions) {
+      navigate(`/quiz/${nextNumber}`);
+    } else {
+      onSaveHistory(score, totalQuestions);
+      navigate(`/result`);
+    }
+  };
   return (
     <div className="quiz-container">
       <div className="quiz-header">

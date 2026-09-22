@@ -7,25 +7,28 @@ const decodeHTML = (text) => {
 };
 
 function QuestionCard({
-  currentQuestion,
-  currentIndex,
-  totalQuestions,
+  questions,
   selectedAnswer,
   onAnswer,
-  onNext,
+  score,
+  onSaveHistory,
+  setSelectedAnswer,
 }) {
   const { number } = useParams();
   const navigate = useNavigate();
+
+  // Mengubah parameter nomor di URL (misal: "1") menjadi index array (misal: 0)
   const currentIndex = parseInt(number, 10) - 1;
   const currentQuestion = questions[currentIndex];
   const totalQuestions = questions.length;
 
+  // Jika user refresh atau ketik URL manual saat questions belum terisi
   if (!currentQuestion) {
     return (
       <div className="quiz-container">
         <h2>Soal tidak ditemukan!</h2>
         <button className="main-btn" onClick={() => navigate("/")}>
-          Kembali ke pengaturan
+          Kembali ke Pengaturan
         </button>
       </div>
     );
@@ -35,16 +38,19 @@ function QuestionCard({
   const progressPercentage = ((currentIndex + 1) / totalQuestions) * 100;
 
   const handleNext = () => {
-    selectedAnswer(null);
+    setSelectedAnswer(null);
     const nextNumber = parseInt(number, 10) + 1;
 
     if (nextNumber <= totalQuestions) {
+      // Pindah ke route nomor soal berikutnya
       navigate(`/quiz/${nextNumber}`);
     } else {
+      // Jika sudah soal terakhir, simpan riwayat & ke hasil
       onSaveHistory(score, totalQuestions);
-      navigate(`/result`);
+      navigate("/result");
     }
   };
+
   return (
     <div className="quiz-container">
       <div className="quiz-header">
@@ -57,7 +63,7 @@ function QuestionCard({
         <div className="progres-bar-background">
           <div
             className="progress-bar-fill"
-            style={{ width: `${progressPrecentage}%` }}
+            style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
       </div>
@@ -76,7 +82,7 @@ function QuestionCard({
           return (
             <button
               key={index}
-              onClick={() => onAnswer(answer)}
+              onClick={() => onAnswer(answer, currentQuestion)}
               disabled={selectedAnswer !== null}
               className={btnClass}
             >
@@ -88,15 +94,18 @@ function QuestionCard({
           );
         })}
       </div>
+
       {selectedAnswer && (
         <div className="feedback-container">
           <div
-            className={`status-badge ${isCorrect ? "status-correct" : "status-wrong"}`}
+            className={`status-badge ${
+              isCorrect ? "status-correct" : "status-wrong"
+            }`}
           >
             {isCorrect ? "🟢 Benar!" : "🔴 Salah!"}
           </div>
-          <button className="next-button main-btn" onClick={onNext}>
-            Next ➔
+          <button className="next-button main-btn" onClick={handleNext}>
+            {parseInt(number, 10) === totalQuestions ? "Selesai ➔" : "Next ➔"}
           </button>
         </div>
       )}

@@ -17,10 +17,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);
-
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
@@ -70,34 +67,11 @@ function App() {
           ]),
         }));
         setQuestions(formatted);
-        setCurrentIndex(0);
-        setSelectedAnswer(null);
         setScore(0);
-        navigate("/quiz");
+        navigate("/quiz/1");
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  };
-
-  const handleAnswer = (answer) => {
-    setSelectedAnswer(answer);
-    const isCorrect = answer === questions[currentIndex].correct_answer;
-    const newScore = isCorrect ? score + 1 : score;
-
-    if (isCorrect) setScore(newScore);
-
-    if (currentIndex === questions.length - 1) {
-      saveHistory(newScore, questions.length);
-    }
-  };
-
-  const handleNextQuestion = () => {
-    if (currentIndex < questions.length - 1) {
-      setSelectedAnswer(null);
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      navigate("/result");
-    }
   };
 
   if (loading) return <h1>⏳ Memuat soal...</h1>;
@@ -130,26 +104,20 @@ function App() {
         }
       />
       <Route
-        path="/quiz"
+        path="/quiz/:number"
         element={
           <QuestionCard
-            currentQuestion={questions[currentIndex]}
-            currentIndex={currentIndex}
-            totalQuestions={questions.length}
-            selectedAnswer={selectedAnswer}
-            onAnswer={handleAnswer}
-            onNext={handleNextQuestion}
+            questions={questions}
+            score={score}
+            setScore={setScore}
+            onSaveHistory={saveHistory}
           />
         }
       />
       <Route
         path="/leaderboard"
         element={
-          <Leaderboard
-            history={history}
-            onClearHistory={handleClearHistory}
-            onBack={() => navigate("/")}
-          />
+          <Leaderboard history={history} onClearHistory={handleClearHistory} />
         }
       />
       <Route

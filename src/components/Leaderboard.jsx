@@ -1,4 +1,6 @@
-function Leaderboard({ history, onClearHistory, onBack }) {
+import { Link } from "react-router-dom";
+
+function Leaderboard({ history, onClearHistory }) {
   const sortedHistory = [...history].sort((a, b) => b.rawScore - a.rawScore);
 
   return (
@@ -28,9 +30,9 @@ function Leaderboard({ history, onClearHistory, onBack }) {
         )}
       </div>
 
-      <button className="next-button" onClick={onBack}>
-        Kembali ke Pengaturan
-      </button>
+      <Link to="/" className="btn">
+        Kembali ke pengaturan
+      </Link>
     </div>
   );
 }

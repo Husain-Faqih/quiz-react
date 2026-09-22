@@ -29,7 +29,6 @@ function Leaderboard({ history, onClearHistory }) {
           </button>
         )}
       </div>
-
       <Link to="/" className="btn">
         Kembali ke pengaturan
       </Link>

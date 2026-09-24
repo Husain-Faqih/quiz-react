@@ -14,18 +14,41 @@ function App() {
   const [difficulty, setDifficulty] = useState("easy");
   const [category, setCategory] = useState("");
 
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState(() => {
+    const saved = sessionStorage.getItem("quiz_questions");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [score, setScore] = useState(() => {
+    const saved = sessionStorage.getItem("quiz_score");
+    return saved ? JSON.parse(saved) : 0;
+  });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [score, setScore] = useState(0);
   const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    sessionStorage.setItem("quiz_questions", JSON.stringify(questions));
+  }, [questions]);
+
+  useEffect(() => {
+    sessionStorage.setItem("quiz_score", JSON.stringify(score));
+  }, [score]);
 
   useEffect(() => {
     const savedHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
     setHistory(savedHistory);
   }, []);
+
+  const clearQuizSession = () => {
+    sessionStorage.removeItem("quiz_questions");
+    sessionStorage.removeItem("quiz_score");
+    setQuestions([]);
+    setScore(0);
+    setSelectedAnswer(null);
+  };
 
   const saveHistory = (finalScore, totalQuestions) => {
     const existingHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
@@ -39,6 +62,8 @@ function App() {
     const updatedHistory = [...existingHistory, newEntry];
     localStorage.setItem("riwayat", JSON.stringify(updatedHistory));
     setHistory(updatedHistory);
+
+    clearQuizSession();
   };
 
   const handleClearHistory = () => {
@@ -76,13 +101,18 @@ function App() {
             ...q.incorrect_answers,
           ]),
         }));
+
+        clearQuizSession();
         setQuestions(formatted);
-        setScore(0);
-        setSelectedAnswer(null);
         navigate("/quiz/1");
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
+  };
+
+  const handleReset = () => {
+    clearQuizSession();
+    navigate("/");
   };
 
   if (loading) return <h1>⏳ Memuat soal...</h1>;
@@ -99,6 +129,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="*" element={<NotFound />} />
       <Route
         path="/"
         element={
@@ -141,11 +172,10 @@ function App() {
             score={score}
             totalQuestions={questions.length}
             onViewLeaderboard={() => navigate("/leaderboard")}
-            onReset={() => navigate("/")}
+            onReset={handleReset}
           />
         }
       />
-      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

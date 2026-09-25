@@ -129,7 +129,6 @@ function App() {
 
   return (
     <Routes>
-      <Route path="*" element={<NotFound />} />
       <Route
         path="/"
         element={
@@ -176,6 +175,7 @@ function App() {
           />
         }
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

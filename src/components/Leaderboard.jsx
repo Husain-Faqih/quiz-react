@@ -1,7 +1,16 @@
 import { Link } from "react-router-dom";
 
 function Leaderboard({ history, onClearHistory }) {
-  const sortedHistory = [...history].sort((a, b) => b.rawScore - a.rawScore);
+  const sortedHistory = [...history].sort((a, b) => {
+    const getRatio = (item) => {
+      if (item.score && item.score.includes("/")) {
+        const [score, total] = item.score.split("/").map(Number);
+        return total > 0 ? score / total : 0;
+      }
+      return item.rawScore || 0;
+    };
+    return getRatio(b) - getRatio(a);
+  });
 
   return (
     <div className="quiz-container">

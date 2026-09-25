@@ -16,12 +16,23 @@ function Settings({
     { label: "Hard", value: "hard" },
   ];
 
+  const categoryOptions = [
+    { label: "Semua Kategori", value: "" },
+    { label: "General Knowledge", value: "9" },
+    { label: "Film", value: "11" },
+    { label: "Music", value: "12" },
+    { label: "Computers / Tech", value: "18" },
+    { label: "Science & Nature", value: "17" },
+    { label: "Sports", value: "21" },
+    { label: "Geography", value: "22" },
+    { label: "History", value: "23" },
+  ];
+
   return (
     <div className="quiz-container">
       <h1 className="quiz-title">🎮 Pengaturan Quiz</h1>
 
       <div className="settings-form">
-        {/* Option Jumlah Soal (Pill Button) */}
         <div className="input-group">
           <label>🎯 Jumlah Soal</label>
           <div className="pill-group">
@@ -38,7 +49,6 @@ function Settings({
           </div>
         </div>
 
-        {/* Option Kesulitan (Pill Button) */}
         <div className="input-group">
           <label>⚡ Tingkat Kesulitan</label>
           <div className="pill-group">
@@ -55,22 +65,20 @@ function Settings({
           </div>
         </div>
 
-        {/* Option Kategori (Custom Select) */}
         <div className="input-group">
           <label>📚 Kategori</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
-            <option value="">Semua Kategori</option>
-            <option value="9">General Knowledge</option>
-            <option value="17">Science & Nature</option>
-            <option value="21">Sports</option>
-            <option value="11">Film</option>
+            {categoryOptions.map((cat) => (
+              <option key={cat.value} value={cat.value}>
+                {cat.label}
+              </option>
+            ))}
           </select>
         </div>
 
-        {/* Action Buttons */}
         <div className="action-buttons">
           <button className="next-button main-btn" onClick={onStart}>
             🚀 Mulai Kuis

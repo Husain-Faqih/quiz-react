@@ -1,10 +1,10 @@
 function Result({ score, totalQuestions, onViewLeaderboard, onReset }) {
-  const percentage = (score / totalQuestions) * 100;
+  const percentage = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
   const getFeedbackMessage = () => {
     if (percentage === 100) return " ✨ Luar biasa! Kamu dapat nilai sempurna!";
-    if (percentage === 75)
+    if (percentage >= 75)
       return " 👏 Kerja bagus! Hasil yang sangat memuaskan!";
-    if (percentage === 50) return " 👍 Lumayan! Masih bisa di tingkatkan lagi!";
+    if (percentage >= 50) return " 👍 Lumayan! Masih bisa di tingkatkan lagi!";
     return "💡 Jangan menyerah! Coba latihan lagi.";
   };
   return (

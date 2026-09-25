@@ -50,11 +50,11 @@ function App() {
     setSelectedAnswer(null);
   };
 
-  const saveHistory = (finalScore, totalQuestions) => {
+  const saveHistory = (totalQuestions) => {
     const existingHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
     const newEntry = {
-      score: `${finalScore}/${totalQuestions}`,
-      rawScore: finalScore,
+      score: `${score}/${totalQuestions}`,
+      rawScore: score,
       difficulty: difficulty || "Semua",
       category: category || "Semua",
       date: new Date().toLocaleString("id-ID"),
@@ -62,8 +62,6 @@ function App() {
     const updatedHistory = [...existingHistory, newEntry];
     localStorage.setItem("riwayat", JSON.stringify(updatedHistory));
     setHistory(updatedHistory);
-
-    clearQuizSession();
   };
 
   const handleClearHistory = () => {

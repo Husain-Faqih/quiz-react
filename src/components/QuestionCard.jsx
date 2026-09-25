@@ -42,10 +42,8 @@ function QuestionCard({
     const nextNumber = parseInt(number, 10) + 1;
 
     if (nextNumber <= totalQuestions) {
-      // Pindah ke route nomor soal berikutnya
       navigate(`/quiz/${nextNumber}`);
     } else {
-      // Jika sudah soal terakhir, simpan riwayat & ke hasil
       onSaveHistory(score, totalQuestions);
       navigate("/result");
     }

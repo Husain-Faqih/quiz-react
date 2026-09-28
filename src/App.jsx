@@ -84,7 +84,11 @@ function App() {
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correct_answer;
     if (isCorrect) {
-      setScore((prevScore) => prevScore + 1);
+      setScore((prevScore) => {
+        const newScore = prevScore + 1;
+        console.log("🔥 [App.jsx] Score Update:", newScore);
+        return newScore;
+      });
     }
   };
 

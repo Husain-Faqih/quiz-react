@@ -1,13 +1,22 @@
 function Result({ score, totalQuestions, onViewLeaderboard, onReset }) {
+  console.log(
+    "🎯 [Result.jsx] Props Diterima -> Score:",
+    score,
+    "| Total Questions:",
+    totalQuestions,
+  );
+
   const percentage =
     totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+
   const getFeedbackMessage = () => {
     if (percentage === 100) return " ✨ Luar biasa! Kamu dapat nilai sempurna!";
     if (percentage >= 75)
       return " 👏 Kerja bagus! Hasil yang sangat memuaskan!";
-    if (percentage >= 50) return " 👍 Lumayan! Masih bisa di tingkatkan lagi!";
+    if (percentage >= 50) return " 👍 Lumayan! Masih bisa ditingkatkan lagi!";
     return "💡 Jangan menyerah! Coba latihan lagi.";
   };
+
   return (
     <div className="quiz-container">
       <h1 className="quiz-title">🎉 Quiz Selesai!</h1>

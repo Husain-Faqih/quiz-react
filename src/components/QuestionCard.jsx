@@ -1,13 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 
 const decodeHTML = (text) => {
-  const textarea = document.createElement("textarea");
-  textarea.innerHTML = text;
-  return textarea.value;
+  if (!text) return "";
+  const doc = new DOMParser().parseFromString(text, "text/html");
+  return doc.body.textContent;
 };
 
 function QuestionCard({
-  questions,
+  questions = [],
   selectedAnswer,
   onAnswer,
   score,
@@ -17,12 +17,10 @@ function QuestionCard({
   const { number } = useParams();
   const navigate = useNavigate();
 
-  // Mengubah parameter nomor di URL (misal: "1") menjadi index array (misal: 0)
   const currentIndex = parseInt(number, 10) - 1;
   const currentQuestion = questions[currentIndex];
   const totalQuestions = questions.length;
 
-  // Jika user refresh atau ketik URL manual saat questions belum terisi
   if (!currentQuestion) {
     return (
       <div className="quiz-container">
@@ -44,7 +42,14 @@ function QuestionCard({
     if (nextNumber <= totalQuestions) {
       navigate(`/quiz/${nextNumber}`);
     } else {
-      onSaveHistory(score, totalQuestions);
+      console.log(
+        "🚀 [QuestionCard] Menuju Result - Score Saat Ini:",
+        score,
+        "| Total Soal:",
+        totalQuestions,
+      );
+
+      onSaveHistory(totalQuestions, score);
       navigate("/result");
     }
   };
@@ -79,7 +84,7 @@ function QuestionCard({
 
           return (
             <button
-              key={index}
+              key={`${currentIndex}-${index}`}
               onClick={() => onAnswer(answer, currentQuestion)}
               disabled={selectedAnswer !== null}
               className={btnClass}

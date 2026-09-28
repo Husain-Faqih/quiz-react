@@ -1,5 +1,6 @@
 function Result({ score, totalQuestions, onViewLeaderboard, onReset }) {
-  const percentage = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
+  const percentage =
+    totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
   const getFeedbackMessage = () => {
     if (percentage === 100) return " ✨ Luar biasa! Kamu dapat nilai sempurna!";
     if (percentage >= 75)

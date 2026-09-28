@@ -64,6 +64,7 @@ function App() {
   const saveHistory = (totalQuestions, finalScore = score) => {
     const existingHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
     const newEntry = {
+      id: Date.now(),
       score: `${finalScore}/${totalQuestions}`,
       rawScore: finalScore,
       difficulty: difficulty || "Semua",
@@ -71,6 +72,17 @@ function App() {
       date: new Date().toLocaleString("id-ID"),
     };
     const updatedHistory = [...existingHistory, newEntry];
+    localStorage.setItem("riwayat", JSON.stringify(updatedHistory));
+    setHistory(updatedHistory);
+  };
+
+  const handleDeleteHistoryItem = (targetId, fallbackIndex) => {
+    let updatedHistory;
+    if (targetId) {
+      updatedHistory = history.filter((item) => item.id !== targetId);
+    } else {
+      updatedHistory = history.filter((_, index) => index !== fallbackIndex);
+    }
     localStorage.setItem("riwayat", JSON.stringify(updatedHistory));
     setHistory(updatedHistory);
   };
@@ -168,7 +180,6 @@ function App() {
             setSelectedAnswer={setSelectedAnswer}
             onAnswer={handleAnswer}
             score={score}
-            setScore={setScore}
             onSaveHistory={saveHistory}
           />
         }
@@ -176,7 +187,11 @@ function App() {
       <Route
         path="/leaderboard"
         element={
-          <Leaderboard history={history} onClearHistory={handleClearHistory} />
+          <Leaderboard
+            history={history}
+            onDeleteItem={handleDeleteHistoryItem}
+            onClearHistory={handleClearHistory}
+          />
         }
       />
       <Route

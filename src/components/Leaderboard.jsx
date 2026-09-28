@@ -1,15 +1,23 @@
 import { Link } from "react-router-dom";
 
-function Leaderboard({ history, onClearHistory }) {
+function Leaderboard({ history = [], onClearHistory }) {
+  const getRatio = (item) => {
+    if (
+      item?.score &&
+      typeof item.score === "string" &&
+      item.score.includes("/")
+    ) {
+      const [score, total] = item.score.split("/").map(Number);
+      return total > 0 ? score / total : 0;
+    }
+    return item?.rawScore || 0;
+  };
+
   const sortedHistory = [...history].sort((a, b) => {
-    const getRatio = (item) => {
-      if (item.score && item.score.includes("/")) {
-        const [score, total] = item.score.split("/").map(Number);
-        return total > 0 ? score / total : 0;
-      }
-      return item.rawScore || 0;
-    };
-    return getRatio(b) - getRatio(a);
+    const ratioDiff = getRatio(b) - getRatio(a);
+    if (ratioDiff !== 0) return ratioDiff;
+
+    return (b.rawScore || 0) - (a.rawScore || 0);
   });
 
   return (
@@ -23,12 +31,17 @@ function Leaderboard({ history, onClearHistory }) {
           </p>
         ) : (
           <ul className="history-list">
-            {sortedHistory.map((item, index) => (
-              <li key={index}>
-                <strong>Skor: {item.score}</strong> | Kesulitan:{" "}
-                {item.difficulty} | Tanggal: {item.date}
-              </li>
-            ))}
+            {sortedHistory.map((item, index) => {
+              const uniqueKey = item.id || `${item.date}-${index}`;
+
+              return (
+                <li key={uniqueKey}>
+                  <strong>Skor: {item.score || 0}</strong> | Kategori:{" "}
+                  {item.category || "Semua"} | Kesulitan:{" "}
+                  {item.difficulty || "Semua"} | Tanggal: {item.date || "-"}
+                </li>
+              );
+            })}
           </ul>
         )}
 
@@ -38,8 +51,9 @@ function Leaderboard({ history, onClearHistory }) {
           </button>
         )}
       </div>
+
       <Link to="/" className="btn">
-        Kembali ke pengaturan
+        Kembali ke Pengaturan
       </Link>
     </div>
   );

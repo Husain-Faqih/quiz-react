@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
-function Leaderboard({ history = [], onClearHistory }) {
+function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
+  // Hitung rasio skor
   const getRatio = (item) => {
     if (
       item?.score &&
@@ -13,12 +14,28 @@ function Leaderboard({ history = [], onClearHistory }) {
     return item?.rawScore || 0;
   };
 
+  // Mengurutkan riwayat
   const sortedHistory = [...history].sort((a, b) => {
     const ratioDiff = getRatio(b) - getRatio(a);
     if (ratioDiff !== 0) return ratioDiff;
-
     return (b.rawScore || 0) - (a.rawScore || 0);
   });
+
+  // Konfirmasi Hapus Semua
+  const handleClearAllWithConfirm = () => {
+    const isConfirmed = window.confirm("Yakin mau hapus semua riwayat kuis?");
+    if (isConfirmed && typeof onClearHistory === "function") {
+      onClearHistory();
+    }
+  };
+
+  // Konfirmasi Hapus Satu per Satu
+  const handleDeleteItemWithConfirm = (targetId, originalIndex) => {
+    const isConfirmed = window.confirm("Yakin mau hapus riwayat ini?");
+    if (isConfirmed && typeof onDeleteItem === "function") {
+      onDeleteItem(targetId, originalIndex);
+    }
+  };
 
   return (
     <div className="quiz-container">
@@ -32,13 +49,42 @@ function Leaderboard({ history = [], onClearHistory }) {
         ) : (
           <ul className="history-list">
             {sortedHistory.map((item, index) => {
+              const originalIndex = history.indexOf(item);
               const uniqueKey = item.id || `${item.date}-${index}`;
 
               return (
-                <li key={uniqueKey}>
-                  <strong>Skor: {item.score || 0}</strong> | Kategori:{" "}
-                  {item.category || "Semua"} | Kesulitan:{" "}
-                  {item.difficulty || "Semua"} | Tanggal: {item.date || "-"}
+                <li
+                  key={uniqueKey}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <div>
+                    <strong>Skor: {item.score || 0}</strong> | Kategori:{" "}
+                    {item.category || "Semua"} | Kesulitan:{" "}
+                    {item.difficulty || "Semua"} | Tanggal: {item.date || "-"}
+                  </div>
+
+                  {/* Tombol Hapus Satuan */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleDeleteItemWithConfirm(item.id, originalIndex)
+                    }
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "1.1rem",
+                      marginLeft: "10px",
+                    }}
+                    title="Hapus riwayat ini"
+                  >
+                    ❌
+                  </button>
                 </li>
               );
             })}
@@ -46,13 +92,18 @@ function Leaderboard({ history = [], onClearHistory }) {
         )}
 
         {sortedHistory.length > 0 && (
-          <button className="clear-button" onClick={onClearHistory}>
+          <button
+            type="button"
+            className="clear-button"
+            onClick={handleClearAllWithConfirm}
+            style={{ marginTop: "15px" }}
+          >
             🗑️ Hapus Semua Riwayat
           </button>
         )}
       </div>
 
-      <Link to="/" className="btn">
+      <Link to="/" className="btn" style={{ marginTop: "15px" }}>
         Kembali ke Pengaturan
       </Link>
     </div>

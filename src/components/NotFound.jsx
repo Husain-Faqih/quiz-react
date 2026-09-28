@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import "../style/NotFound.css";
 
-const backgroundStyles = [
+const BACKGROUND_STYLES = [
   "linear-gradient(135deg, #12100E 0%, #2B4162 100%)",
   "linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%)",
 ];
 
 function NotFound() {
-  const [currentBg] = useState(() => {
-    const randomIndex = Math.floor(Math.random() * backgroundStyles.length);
-    return backgroundStyles[randomIndex];
-  });
+  const currentBg = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * BACKGROUND_STYLES.length);
+    return BACKGROUND_STYLES[randomIndex];
+  }, []);
 
   return (
     <div className="notfound-container" style={{ background: currentBg }}>

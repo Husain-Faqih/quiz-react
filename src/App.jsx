@@ -6,7 +6,14 @@ import Leaderboard from "./components/Leaderboard";
 import Result from "./components/Result";
 import NotFound from "./components/NotFound";
 
-const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
+const shuffleArray = (array) => {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
 
 function App() {
   const navigate = useNavigate();
@@ -38,8 +45,12 @@ function App() {
   }, [score]);
 
   useEffect(() => {
-    const savedHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
-    setHistory(savedHistory);
+    try {
+      const savedHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
+      setHistory(savedHistory);
+    } catch {
+      setHistory([]);
+    }
   }, []);
 
   const clearQuizSession = () => {
@@ -50,11 +61,11 @@ function App() {
     setSelectedAnswer(null);
   };
 
-  const saveHistory = (totalQuestions) => {
+  const saveHistory = (totalQuestions, finalScore = score) => {
     const existingHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
     const newEntry = {
-      score: `${score}/${totalQuestions}`,
-      rawScore: score,
+      score: `${finalScore}/${totalQuestions}`,
+      rawScore: finalScore,
       difficulty: difficulty || "Semua",
       category: category || "Semua",
       date: new Date().toLocaleString("id-ID"),
@@ -91,7 +102,9 @@ function App() {
         return res.json();
       })
       .then((data) => {
-        if (data.response_code !== 0) throw new Error("Gagal memuat soal");
+        if (data.response_code !== 0) {
+          throw new Error("Soal tidak ditemukan untuk kombinasi ini.");
+        }
         const formatted = data.results.map((q) => ({
           ...q,
           shuffledAnswers: shuffleArray([

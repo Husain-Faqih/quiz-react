@@ -81,7 +81,7 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
                       fontSize: "1.1rem",
                       marginLeft: "10px",
                     }}
-                    title="Hapus riwayat ini"
+                    title="Hapus riwayat in"
                   >
                     ❌
                   </button>

@@ -97,7 +97,7 @@ function App() {
     const isCorrect = answer === currentQuestion.correct_answer;
     if (isCorrect) {
       setScore((prevScore) => {
-        const newScore = prevScore + 1;
+        const newScore = prevScore + 1;   
         return newScore;
       });
     }

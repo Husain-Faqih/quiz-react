@@ -42,13 +42,6 @@ function QuestionCard({
     if (nextNumber <= totalQuestions) {
       navigate(`/quiz/${nextNumber}`);
     } else {
-      console.log(
-        "🚀 [QuestionCard] Menuju Result - Score Saat Ini:",
-        score,
-        "| Total Soal:",
-        totalQuestions,
-      );
-
       onSaveHistory(totalQuestions, score);
       navigate("/result");
     }

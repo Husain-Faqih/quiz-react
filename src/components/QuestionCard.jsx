@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const decodeHTML = (text) => {
   if (!text) return "";
@@ -17,9 +18,47 @@ function QuestionCard({
   const { number } = useParams();
   const navigate = useNavigate();
 
+  // Waktu / timer
+  const [timeLeft, setTimeLeft] = useState(15);
+
   const currentIndex = parseInt(number, 10) - 1;
   const currentQuestion = questions[currentIndex];
   const totalQuestions = questions.length;
+
+  const handleNext = () => {
+    setSelectedAnswer(null);
+    const nextNumber = parseInt(number, 10) + 1;
+
+    if (nextNumber <= totalQuestions) {
+      navigate(`/quiz/${nextNumber}`);
+    } else {
+      onSaveHistory(totalQuestions, score);
+      navigate("/result");
+    }
+  };
+
+  useEffect(() => {
+    setTimeLeft(15);
+    if (selectedAnswer) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [number, selectedAnswer]);
+
+  useEffect(() => {
+    if (timeLeft === 0 && !selectedAnswer) {
+      handleNext();
+    }
+  }, [timeLeft, selectedAnswer]);
 
   if (!currentQuestion) {
     return (
@@ -35,18 +74,6 @@ function QuestionCard({
   const isCorrect = selectedAnswer === currentQuestion.correct_answer;
   const progressPercentage = ((currentIndex + 1) / totalQuestions) * 100;
 
-  const handleNext = () => {
-    setSelectedAnswer(null);
-    const nextNumber = parseInt(number, 10) + 1;
-
-    if (nextNumber <= totalQuestions) {
-      navigate(`/quiz/${nextNumber}`);
-    } else {
-      onSaveHistory(totalQuestions, score);
-      navigate("/result");
-    }
-  };
-
   return (
     <div className="quiz-container">
       <div className="quiz-header">
@@ -55,6 +82,9 @@ function QuestionCard({
           <span className="question-count">
             Soal <strong>{currentIndex + 1}</strong> dari {totalQuestions}
           </span>
+        </div>
+        <div className="timer-badge">
+          ⌛ Sisa Waktu: <strong>{timeLeft}</strong> detik
         </div>
         <div className="progres-bar-background">
           <div

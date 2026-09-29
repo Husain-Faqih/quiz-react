@@ -98,7 +98,6 @@ function App() {
     if (isCorrect) {
       setScore((prevScore) => {
         const newScore = prevScore + 1;
-        console.log("🔥 [App.jsx] Score Update:", newScore);
         return newScore;
       });
     }

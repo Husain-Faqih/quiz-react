@@ -1,13 +1,6 @@
 import { Link } from "react-router-dom";
 
 function Result({ score, totalQuestions, onViewLeaderboard, onReset }) {
-  console.log(
-    "🎯 [Result.jsx] Props Diterima -> Score:",
-    score,
-    "| Total Questions:",
-    totalQuestions,
-  );
-
   if (!totalQuestions || totalQuestions === 0) {
     return (
       <div className="quiz-container" style={{ textAlign: "center" }}>

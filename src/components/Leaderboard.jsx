@@ -41,11 +41,9 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
     <div className="quiz-container">
       <h1 className="quiz-title">🏆 Leaderboard / Riwayat</h1>
 
-      <div className="leaderboard-section" style={{ borderTop: "none" }}>
+      <div className="leaderboard-section">
         {sortedHistory.length === 0 ? (
-          <p style={{ textAlign: "center", color: "#94a3b8" }}>
-            Belum ada riwayat tersimpan.
-          </p>
+          <p className="empty-message">Belum ada riwayat tersimpan.</p>
         ) : (
           <ul className="history-list">
             {sortedHistory.map((item, index) => {
@@ -53,15 +51,7 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
               const uniqueKey = item.id || `${item.date}-${index}`;
 
               return (
-                <li
-                  key={uniqueKey}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "10px",
-                  }}
-                >
+                <li key={uniqueKey}>
                   <div>
                     <strong>Skor: {item.score || 0}</strong> | Kategori:{" "}
                     {item.category || "Semua"} | Kesulitan:{" "}
@@ -71,16 +61,10 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
                   {/* Tombol Hapus Satuan */}
                   <button
                     type="button"
+                    className="delete-item-btn"
                     onClick={() =>
                       handleDeleteItemWithConfirm(item.id, originalIndex)
                     }
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                      fontSize: "1.1rem",
-                      marginLeft: "10px",
-                    }}
                     title="Hapus riwayat ini"
                   >
                     ❌
@@ -96,14 +80,13 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
             type="button"
             className="clear-button"
             onClick={handleClearAllWithConfirm}
-            style={{ marginTop: "15px" }}
           >
             🗑️ Hapus Semua Riwayat
           </button>
         )}
       </div>
 
-      <Link to="/" className="btn" style={{ marginTop: "15px" }}>
+      <Link to="/" className="btn">
         Kembali ke Pengaturan
       </Link>
     </div>

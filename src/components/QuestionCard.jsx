@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const decodeHTML = (text) => {
   if (!text) return "";
@@ -18,14 +18,22 @@ function QuestionCard({
   const { number } = useParams();
   const navigate = useNavigate();
 
-  // Waktu / timer
   const [timeLeft, setTimeLeft] = useState(15);
+  const autoNextTimerRef = useRef(null);
 
   const currentIndex = parseInt(number, 10) - 1;
   const currentQuestion = questions[currentIndex];
   const totalQuestions = questions.length;
 
+  const isTimeUp = timeLeft === 0;
+  const showFeedback = selectedAnswer !== null || isTimeUp;
+
   const handleNext = () => {
+    if (autoNextTimerRef.current) {
+      clearTimeout(autoNextTimerRef.current);
+      autoNextTimerRef.current = null;
+    }
+
     setSelectedAnswer(null);
     const nextNumber = parseInt(number, 10) + 1;
 
@@ -39,7 +47,15 @@ function QuestionCard({
 
   useEffect(() => {
     setTimeLeft(15);
-    if (selectedAnswer) return;
+    if (autoNextTimerRef.current) {
+      clearTimeout(autoNextTimerRef.current);
+      autoNextTimerRef.current = null;
+    }
+  }, [number]);
+
+  // Hitung Mundur Waktu
+  useEffect(() => {
+    if (showFeedback) return;
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -52,13 +68,22 @@ function QuestionCard({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [number, selectedAnswer]);
+  }, [number, showFeedback]);
 
+  // Auto-Next Jeda 5 Detik 
   useEffect(() => {
-    if (timeLeft === 0 && !selectedAnswer) {
-      handleNext();
+    if (isTimeUp && !selectedAnswer) {
+      autoNextTimerRef.current = setTimeout(() => {
+        handleNext();
+      }, 5000);
     }
-  }, [timeLeft, selectedAnswer]);
+
+    return () => {
+      if (autoNextTimerRef.current) {
+        clearTimeout(autoNextTimerRef.current);
+      }
+    };
+  }, [isTimeUp, selectedAnswer]);
 
   if (!currentQuestion) {
     return (
@@ -99,17 +124,20 @@ function QuestionCard({
       <div className="answers">
         {currentQuestion.shuffledAnswers.map((answer, index) => {
           let btnClass = "answer-btn";
-          if (selectedAnswer !== null) {
-            if (answer === currentQuestion.correct_answer)
+
+          if (showFeedback) {
+            if (answer === currentQuestion.correct_answer) {
               btnClass += " correct";
-            else if (answer === selectedAnswer) btnClass += " wrong";
+            } else if (answer === selectedAnswer) {
+              btnClass += " wrong";
+            }
           }
 
           return (
             <button
               key={`${currentIndex}-${index}`}
               onClick={() => onAnswer(answer, currentQuestion)}
-              disabled={selectedAnswer !== null}
+              disabled={showFeedback}
               className={btnClass}
             >
               <span className="option-prefix">
@@ -121,15 +149,24 @@ function QuestionCard({
         })}
       </div>
 
-      {selectedAnswer && (
+      {showFeedback && (
         <div className="feedback-container">
           <div
             className={`status-badge ${
-              isCorrect ? "status-correct" : "status-wrong"
+              selectedAnswer === null
+                ? "status-wrong"
+                : isCorrect
+                  ? "status-correct"
+                  : "status-wrong"
             }`}
           >
-            {isCorrect ? "🟢 Benar!" : "🔴 Salah!"}
+            {selectedAnswer !== null
+              ? isCorrect
+                ? "🟢 Benar!"
+                : "🔴 Salah!"
+              : "⏰ Waktu Habis!"}
           </div>
+
           <button className="next-button main-btn" onClick={handleNext}>
             {parseInt(number, 10) === totalQuestions ? "Selesai ➔" : "Next ➔"}
           </button>

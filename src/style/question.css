@@ -1,54 +1,69 @@
+.quiz-container {
+    width: 100%;
+    max-width: 640px;
+    margin: 40px auto;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
 .quiz-header {
-    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
 }
 
 .quiz-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
 }
 
 .badge {
-    background: rgba(99, 102, 241, 0.15);
-    color: #818cf8;
-    border: 1px solid rgba(99, 102, 241, 0.3);
+    background-color: #312e81;
+    color: #a5b4fc;
     padding: 4px 12px;
     border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.timer-badge {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    font-weight: 500;
 }
 
 .question-count {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: #94a3b8;
 }
 
-.question-count strong {
-    color: #f8fafc;
-}
-
+/* Menyesuaikan dengan className di QuestionCard.jsx */
+.progres-bar-background,
 .progress-bar-background {
     width: 100%;
-    height: 8px;
-    background: #0f172a;
-    border-radius: 10px;
+    height: 6px;
+    background-color: #334155;
+    border-radius: 999px;
     overflow: hidden;
 }
 
 .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #a855f7, #6366f1);
-    border-radius: 10px;
+    background-color: #6366f1;
     transition: width 0.3s ease;
 }
 
 .question {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.5;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.6;
     color: #f8fafc;
-    margin-bottom: 25px;
+    margin-bottom: 24px;
 }
 
 .answers {
@@ -60,17 +75,24 @@
 .answer-btn {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     width: 100%;
     padding: 14px 18px;
+    background-color: #0f172a;
     border: 1px solid #334155;
     border-radius: 12px;
-    background: #0f172a;
-    color: #f8fafc;
-    font-size: 15px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
     text-align: left;
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+/* Penggabungan hover state */
+.answer-btn:hover:not(:disabled) {
+    background-color: #1e293b;
+    border-color: #6366f1;
+    transform: translateX(4px);
 }
 
 .option-prefix {
@@ -79,65 +101,55 @@
     justify-content: center;
     width: 28px;
     height: 28px;
-    background: #1e293b;
+    background-color: #1e293b;
     border-radius: 6px;
-    font-size: 13px;
-    font-weight: bold;
+    font-size: 0.85rem;
+    font-weight: 600;
     color: #94a3b8;
+    flex-shrink: 0;
 }
 
-.answer-btn:hover:not(:disabled) {
-    background: #1e293b;
-    border-color: #6366f1;
-    transform: translateX(4px);
-}
-
-.answer-btn:hover:not(:disabled) .option-prefix {
-    background: #6366f1;
-    color: #ffffff;
-}
-
+/* Feedback State Jawaban */
 .answer-btn.correct {
-    background: rgba(34, 197, 94, 0.15);
-    border-color: #22c55e;
-    color: #86efac;
+    background-color: rgba(34, 197, 94, 0.1) !important;
+    border-color: #22c55e !important;
+    color: #86efac !important;
 }
 
 .answer-btn.correct .option-prefix {
-    background: #22c55e;
+    background-color: #22c55e;
     color: #ffffff;
 }
 
 .answer-btn.wrong {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: #ef4444;
-    color: #fca5a5;
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    border-color: #ef4444 !important;
+    color: #fca5a5 !important;
 }
 
 .answer-btn.wrong .option-prefix {
-    background: #ef4444;
+    background-color: #ef4444;
     color: #ffffff;
 }
 
 .feedback-container {
-    margin-top: 25px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #334155;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .status-badge {
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
+    font-size: 0.95rem;
     font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 15px;
 }
 
 .status-correct {
-    background: rgba(34, 197, 94, 0.1);
     color: #4ade80;
 }
 
 .status-wrong {
-    background: rgba(239, 68, 68, 0.1);
     color: #f87171;
 }

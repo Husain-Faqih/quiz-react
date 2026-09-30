@@ -1,4 +1,3 @@
-/* Reset & Styling Dasar */
 * {
     margin: 0;
     padding: 0;
@@ -6,9 +5,9 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     min-height: 100vh;
-    background: #0f172a;
+    background-color: #0f172a;
     color: #f8fafc;
     display: flex;
     justify-content: center;
@@ -16,61 +15,69 @@ body {
     padding: 20px;
 }
 
-.quiz-container {
+#root {
     width: 100%;
-    max-width: 700px;
-    background: #1e293b;
-    padding: 35px;
-    border-radius: 20px;
-    border: 1px solid #334155;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .quiz-title {
     text-align: center;
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 800;
     background: linear-gradient(135deg, #a855f7, #6366f1);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 25px;
+    margin-bottom: 24px;
 }
 
-/* Tombol Umum */
 .main-btn {
-    display: block;
-    width: 100%;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    background-color: #6366f1;
     color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-.main-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+.main-btn:hover:not(:disabled) {
+    background-color: #4f46e5;
+    transform: translateY(-1px);
+}
+
+.main-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.main-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .secondary-btn {
     width: 100%;
-    padding: 12px;
+    padding: 12px 20px;
     border: 1px solid #334155;
-    border-radius: 10px;
-    background: #1e293b;
+    border-radius: 8px;
+    background-color: #1e293b;
     color: #cbd5e1;
-    font-size: 15px;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.secondary-btn:hover {
-    background: #334155;
+.secondary-btn:hover:not(:disabled) {
+    background-color: #334155;
     color: #ffffff;
+    border-color: #475569;
+}
+
+.secondary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

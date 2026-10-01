@@ -189,7 +189,7 @@ function App() {
             onAnswer={handleAnswer}
             score={score}
             onSaveHistory={saveHistory}
-            onRecordAnswer={handleUseAnswer} 
+            onRecordAnswer={handleUseAnswer}
           />
         }
       />

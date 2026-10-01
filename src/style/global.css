@@ -107,6 +107,32 @@ body {
     border-left-color: var(--error);
 }
 
+.loading-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    color: #cdd6f4;
+}
+
+.spin-animation {
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

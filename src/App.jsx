@@ -5,6 +5,7 @@ import QuestionCard from "./components/QuestionCard";
 import Leaderboard from "./components/Leaderboard";
 import Result from "./components/Result";
 import NotFound from "./components/NotFound";
+import Loading from "./components/Loading"; // Import komponen Loading baru
 
 const shuffleArray = (array) => {
   const arr = [...array];
@@ -88,7 +89,7 @@ function App() {
   const handleUseAnswer = (answerData) => {
     setUseAnswer((prev) => {
       const isAlreadyRecorded = prev.some(
-        (item) => item.questionIndex === answerData.questionIndex,
+        (item) => item.questionIndex === answerData.questionIndex
       );
       if (isAlreadyRecorded) return prev;
       return [...prev, answerData];
@@ -181,7 +182,9 @@ function App() {
     navigate("/");
   };
 
-  if (loading) return <h1>⏳ Memuat soal...</h1>;
+  // Menggunakan Komponen Loading SVG
+  if (loading) return <Loading />;
+
   if (error)
     return (
       <div>

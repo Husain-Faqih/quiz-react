@@ -1,0 +1,38 @@
+<svg width="243" height="243" viewBox="0 0 243 243" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>
+@keyframes kf_Ellipse_1_transform_0 {
+  0% {
+    transform: translateX(206px) translateY(202px) translate(-95px, -95px) rotate(-6.283rad) translate(95px, 95px) rotate(3.142rad) scaleX(1) scaleY(1) skewX(0rad);
+  }
+  100% {
+    transform: translateX(206px) translateY(202px) translate(-95px, -95px) rotate(0rad) translate(95px, 95px) rotate(3.142rad) scaleX(1) scaleY(1) skewX(0rad);
+  }
+}
+#Ellipse_1 {
+  transform-origin: 0 0;
+  animation: kf_Ellipse_1_transform_0 1s linear infinite;
+}
+@keyframes kf_Ellipse_2_transform_0 {
+  0% {
+    animation-timing-function: ease-out;
+    transform: translateX(164px) translateY(160px) translate(-53px, -53px) rotate(6.283rad) translate(53px, 53px) rotate(-3.142rad) scaleX(1) scaleY(1) skewX(0rad);
+  }
+  100% {
+    transform: translateX(164px) translateY(160px) translate(-53px, -53px) rotate(0rad) translate(53px, 53px) rotate(-3.142rad) scaleX(1) scaleY(1) skewX(0rad);
+  }
+}
+#Ellipse_2 {
+  transform-origin: 0 0;
+  animation: kf_Ellipse_2_transform_0 1s linear infinite;
+}
+</style>
+<g id="Frame_1" clip-path="url(#clip0_116_186)">
+<path id="Ellipse_1" transform="translate(206 202) rotate(180)" d="M182 95C186.418 95 190.035 91.4113 189.664 87.0087C187.785 64.7404 178.098 43.7475 162.175 27.8249C144.359 10.0089 120.196 1.90221e-06 95 0C69.8044 -1.90221e-06 45.6408 10.0089 27.8249 27.8248C11.9022 43.7475 2.21548 64.7403 0.336463 87.0087C-0.0350328 91.4113 3.58172 95 8 95L11 95C15.4183 95 18.9563 91.4081 19.4205 87.0142C21.2395 69.7931 28.9021 53.6177 41.2599 41.2599C55.5127 27.0071 74.8436 19 95 19C115.156 19 134.487 27.0071 148.74 41.2599C161.098 53.6177 168.76 69.7931 170.58 87.0142C171.044 91.4081 174.582 95 179 95H182Z" fill="#007BFF"/>
+<path id="Ellipse_2" transform="translate(164 160) rotate(-180)" d="M100.7 53C103.627 53 106.028 50.6211 105.735 47.7086C104.52 35.5955 99.161 24.2077 90.4767 15.5233C80.5372 5.58391 67.0565 1.06123e-06 53 0C38.9435 -1.06123e-06 25.4628 5.58391 15.5233 15.5233C6.839 24.2077 1.47965 35.5955 0.264633 47.7086C-0.0275061 50.6211 2.37289 53 5.3 53V53C8.22711 53 10.5658 50.6179 10.9307 47.7136C12.0986 38.4176 16.3235 29.7139 23.0187 23.0187C30.9702 15.0671 41.7548 10.6 53 10.6C64.2452 10.6 75.0298 15.0671 82.9813 23.0187C89.6765 29.7139 93.9014 38.4176 95.0693 47.7136C95.4342 50.6179 97.7729 53 100.7 53V53Z" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_116_186">
+<rect width="243" height="243" fill="white"/>
+</clipPath>
+</defs>
+</svg>

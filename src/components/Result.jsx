@@ -12,18 +12,19 @@ function Result({
 
   if (!totalQuestions || totalQuestions === 0) {
     return (
-      <div className="quiz-container" style={{ textAlign: "center" }}>
-        <h1 className="quiz-title">⚠️ Waduh!</h1>
-        <p className="feedback-message" style={{ margin: "20px 0" }}>
-          Kamu belum mengerjakan quiz nih. Yuk, mulai quiz dulu!
+      <div className="quiz-container empty-state-card">
+        <div className="empty-state-icon">🧐</div>
+        <h2 className="quiz-title">Belum ada Hasil Quiz</h2>
+        <p className="feedback-message">
+          Kamu belum menyelesaikan quiz apapun. Yuk, pilih dan selesaikan quiz
+          kamu terlebih dahulu!
         </p>
-        <Link
-          to="/"
-          className="main-btn"
-          style={{ textDecoration: "none", display: "inline-block" }}
-        >
-          🚀 Mulai Quiz Sekarang!!
-        </Link>
+
+        <div className="empty-state-actions">
+          <Link to="/" className="main-btn">
+            🚀 Mulai Quiz Sekarang
+          </Link>
+        </div>
       </div>
     );
   }

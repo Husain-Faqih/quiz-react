@@ -11,6 +11,30 @@
     text-align: center;
 }
 
+.quiz-container.empty-state-card {
+    max-width: 480px;
+    padding: 40px 24px;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.empty-state-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.empty-state-actions a {
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .quiz-title,
 .result-title {
     display: flex;
@@ -61,6 +85,40 @@
     gap: 6px;
 }
 
+/* Review Section */
+.review-section {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 6px;
+    margin: 15px 0;
+}
+
+.review-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.review-section::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.review-card {
+    border-radius: 8px;
+    margin: 8px 0;
+    background-color: rgba(255, 255, 255, 0.05);
+    text-align: left;
+    padding: 12px;
+    border-left: 5px solid transparent;
+}
+
+.review-card.correct-card {
+    border-left-color: #4caf50;
+}
+
+.review-card.wrong-card {
+    border-left-color: #f44336;
+}
+
 .action-buttons,
 .result-actions {
     display: grid;
@@ -76,6 +134,7 @@
     padding: 14px;
     font-size: 1rem;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 @media (max-width: 480px) {

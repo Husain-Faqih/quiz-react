@@ -33,7 +33,7 @@ body {
 }
 
 .main-btn {
-    background-color: #6366f1;
+    background-color: #0EA5E9;
     color: #ffffff;
     border: none;
     padding: 10px 20px;
@@ -45,7 +45,7 @@ body {
 }
 
 .main-btn:hover:not(:disabled) {
-    background-color: #4f46e5;
+    background-color: #0284C7;
     transform: translateY(-1px);
 }
 
@@ -58,12 +58,44 @@ body {
     cursor: not-allowed;
 }
 
+:root {
+    --bg-main: #0f172a;
+    --bg-card: #1e293b;
+    --bg-inner: #0f172a;
+
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+
+    --success: #10b981;
+    --error: #ef4444;
+
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
+
+.main-btn {
+    background-color: var(--primary);
+    color: var(--text-main);
+}
+
+.main-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.review-card.correct-card {
+    border-left-color: var(--success);
+}
+
+.review-card.wrong-card {
+    border-left-color: var(--error);
+}
+
 .secondary-btn {
     width: 100%;
     padding: 12px 20px;
     border: 1px solid #334155;
     border-radius: 8px;
-    background-color: #1e293b;
+    background-color: #1E293B;
     color: #cbd5e1;
     font-size: 0.9rem;
     font-weight: 600;

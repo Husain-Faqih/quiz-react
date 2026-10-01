@@ -31,6 +31,7 @@ function App() {
     return saved ? JSON.parse(saved) : 0;
   });
 
+  const [useAnswer, setUseAnswer] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -59,6 +60,17 @@ function App() {
     setQuestions([]);
     setScore(0);
     setSelectedAnswer(null);
+    setUseAnswer([]);
+  };
+
+  const handleUseAnswer = (answerData) => {
+    setUseAnswer((prev) => {
+      const isAlreadyRecorded = prev.some(
+        (item) => item.questionIndex === answerData.questionIndex,
+      );
+      if (isAlreadyRecorded) return prev;
+      return [...prev, answerData];
+    });
   };
 
   const saveHistory = (totalQuestions, finalScore = score) => {
@@ -96,10 +108,7 @@ function App() {
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correct_answer;
     if (isCorrect) {
-      setScore((prevScore) => {
-        const newScore = prevScore + 1;   
-        return newScore;
-      });
+      setScore((prevScore) => prevScore + 1);
     }
   };
 
@@ -180,6 +189,7 @@ function App() {
             onAnswer={handleAnswer}
             score={score}
             onSaveHistory={saveHistory}
+            onRecordAnswer={handleUseAnswer} 
           />
         }
       />
@@ -199,6 +209,7 @@ function App() {
           <Result
             score={score}
             totalQuestions={questions.length}
+            userAnswers={useAnswer}
             onViewLeaderboard={() => navigate("/leaderboard")}
             onReset={handleReset}
           />

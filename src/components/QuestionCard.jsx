@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback } from "react";
+import "../style/question.css"; // Pastikan CSS terimport
 
 const decodeHTML = (text) => {
   if (!text) return "";
@@ -12,6 +13,7 @@ function QuestionCard({
   selectedAnswer,
   onAnswer,
   score,
+  streak = 0, // Props streak baru
   onSaveHistory,
   setSelectedAnswer,
   onRecordAnswer,
@@ -20,6 +22,7 @@ function QuestionCard({
   const navigate = useNavigate();
 
   const [timeLeft, setTimeLeft] = useState(15);
+  const [cardAnimation, setCardAnimation] = useState("slide-in");
   const autoNextTimerRef = useRef(null);
 
   const currentIndex = parseInt(number, 10) - 1;
@@ -53,9 +56,10 @@ function QuestionCard({
     setSelectedAnswer,
   ]);
 
-  // Reset timer tiap kali nomor soal berubah
   useEffect(() => {
     setTimeLeft(15);
+    setCardAnimation("slide-in"); // Trigger animasi slide-in saat nomor berubah
+
     if (autoNextTimerRef.current) {
       clearTimeout(autoNextTimerRef.current);
       autoNextTimerRef.current = null;
@@ -70,6 +74,7 @@ function QuestionCard({
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
+          setCardAnimation("shake");
           return 0;
         }
         return prev - 1;
@@ -99,7 +104,6 @@ function QuestionCard({
     currentIndex,
   ]);
 
-  // Auto-Next Jeda 5 Detik saat Waktu Habis
   useEffect(() => {
     if (isTimeUp && !selectedAnswer) {
       autoNextTimerRef.current = setTimeout(() => {
@@ -114,10 +118,19 @@ function QuestionCard({
     };
   }, [isTimeUp, selectedAnswer, handleNext]);
 
-  // --- KONTROL KEYBOARD ---
+  const handleOptionClick = (answer) => {
+    if (showFeedback) return;
+
+    const isCorrect = answer === currentQuestion.correct_answer;
+    if (!isCorrect) {
+      setCardAnimation("shake");
+    }
+
+    onAnswer(answer, currentQuestion);
+  };
+
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // bisa milih jawaban pakai angka (1-4) atau huruf (A-D / a-d)
       if (!showFeedback && currentQuestion?.shuffledAnswers) {
         const key = e.key.toUpperCase();
         let targetIndex = -1;
@@ -133,12 +146,11 @@ function QuestionCard({
           targetIndex < currentQuestion.shuffledAnswers.length
         ) {
           const chosenAnswer = currentQuestion.shuffledAnswers[targetIndex];
-          onAnswer(chosenAnswer, currentQuestion);
+          handleOptionClick(chosenAnswer);
           return;
         }
       }
 
-      // Bisa lanjut ke soal berikutnya dengan Enter atau Panah Kanan
       if (showFeedback && (e.key === "Enter" || e.key === "ArrowRight")) {
         e.preventDefault();
         handleNext();
@@ -147,7 +159,7 @@ function QuestionCard({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [showFeedback, currentQuestion, onAnswer, handleNext]);
+  }, [showFeedback, currentQuestion, handleNext]);
 
   if (!currentQuestion) {
     return (
@@ -164,7 +176,11 @@ function QuestionCard({
   const progressPercentage = ((currentIndex + 1) / totalQuestions) * 100;
 
   return (
-    <div className="quiz-container">
+    <div className={`quiz-container ${cardAnimation}`}>
+      {streak > 1 && (
+        <div className="streak-badge key-pop">🔥 {streak}x STREAK COMBO!</div>
+      )}
+
       <div className="quiz-header">
         <div className="quiz-info">
           <span className="badge">{currentQuestion.category}</span>
@@ -200,7 +216,7 @@ function QuestionCard({
           return (
             <button
               key={`${currentIndex}-${index}`}
-              onClick={() => onAnswer(answer, currentQuestion)}
+              onClick={() => handleOptionClick(answer)}
               disabled={showFeedback}
               className={btnClass}
             >
@@ -214,7 +230,7 @@ function QuestionCard({
       </div>
 
       {showFeedback && (
-        <div className="feedback-container">
+        <div className="feedback-container slide-up">
           <div
             className={`status-badge ${
               selectedAnswer === null

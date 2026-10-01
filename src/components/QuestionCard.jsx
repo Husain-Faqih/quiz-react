@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const decodeHTML = (text) => {
   if (!text) return "";
@@ -14,6 +14,7 @@ function QuestionCard({
   score,
   onSaveHistory,
   setSelectedAnswer,
+  onRecordAnswer,
 }) {
   const { number } = useParams();
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ function QuestionCard({
   const isTimeUp = timeLeft === 0;
   const showFeedback = selectedAnswer !== null || isTimeUp;
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (autoNextTimerRef.current) {
       clearTimeout(autoNextTimerRef.current);
       autoNextTimerRef.current = null;
@@ -43,8 +44,16 @@ function QuestionCard({
       onSaveHistory(totalQuestions, score);
       navigate("/result");
     }
-  };
+  }, [
+    number,
+    totalQuestions,
+    score,
+    navigate,
+    onSaveHistory,
+    setSelectedAnswer,
+  ]);
 
+  // Reset timer tiap kali nomor soal berubah
   useEffect(() => {
     setTimeLeft(15);
     if (autoNextTimerRef.current) {
@@ -70,7 +79,27 @@ function QuestionCard({
     return () => clearInterval(timer);
   }, [number, showFeedback]);
 
-  // Auto-Next Jeda 5 Detik 
+  useEffect(() => {
+    if (showFeedback && currentQuestion && onRecordAnswer) {
+      onRecordAnswer({
+        questionIndex: currentIndex,
+        question: decodeHTML(currentQuestion.question),
+        selectedAnswer: selectedAnswer
+          ? decodeHTML(selectedAnswer)
+          : "Tidak dijawab (Waktu habis)",
+        correctAnswer: decodeHTML(currentQuestion.correct_answer),
+        isCorrect: selectedAnswer === currentQuestion.correct_answer,
+      });
+    }
+  }, [
+    showFeedback,
+    currentQuestion,
+    selectedAnswer,
+    onRecordAnswer,
+    currentIndex,
+  ]);
+
+  // Auto-Next Jeda 5 Detik saat Waktu Habis
   useEffect(() => {
     if (isTimeUp && !selectedAnswer) {
       autoNextTimerRef.current = setTimeout(() => {
@@ -83,7 +112,42 @@ function QuestionCard({
         clearTimeout(autoNextTimerRef.current);
       }
     };
-  }, [isTimeUp, selectedAnswer]);
+  }, [isTimeUp, selectedAnswer, handleNext]);
+
+  // --- KONTROL KEYBOARD ---
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // bisa milih jawaban pakai angka (1-4) atau huruf (A-D / a-d)
+      if (!showFeedback && currentQuestion?.shuffledAnswers) {
+        const key = e.key.toUpperCase();
+        let targetIndex = -1;
+
+        if (["1", "2", "3", "4"].includes(key)) {
+          targetIndex = parseInt(key, 10) - 1;
+        } else if (["A", "B", "C", "D"].includes(key)) {
+          targetIndex = key.charCodeAt(0) - 65;
+        }
+
+        if (
+          targetIndex >= 0 &&
+          targetIndex < currentQuestion.shuffledAnswers.length
+        ) {
+          const chosenAnswer = currentQuestion.shuffledAnswers[targetIndex];
+          onAnswer(chosenAnswer, currentQuestion);
+          return;
+        }
+      }
+
+      // Bisa lanjut ke soal berikutnya dengan Enter atau Panah Kanan
+      if (showFeedback && (e.key === "Enter" || e.key === "ArrowRight")) {
+        e.preventDefault();
+        handleNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showFeedback, currentQuestion, onAnswer, handleNext]);
 
   if (!currentQuestion) {
     return (

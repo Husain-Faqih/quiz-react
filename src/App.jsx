@@ -31,6 +31,16 @@ function App() {
     return saved ? JSON.parse(saved) : 0;
   });
 
+  const [streak, setStreak] = useState(() => {
+    const saved = sessionStorage.getItem("quiz_streak");
+    return saved ? JSON.parse(saved) : 0;
+  });
+
+  const [maxStreak, setMaxStreak] = useState(() => {
+    const saved = sessionStorage.getItem("quiz_max_streak");
+    return saved ? JSON.parse(saved) : 0;
+  });
+
   const [useAnswer, setUseAnswer] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -46,6 +56,14 @@ function App() {
   }, [score]);
 
   useEffect(() => {
+    sessionStorage.setItem("quiz_streak", JSON.stringify(streak));
+  }, [streak]);
+
+  useEffect(() => {
+    sessionStorage.setItem("quiz_max_streak", JSON.stringify(maxStreak));
+  }, [maxStreak]);
+
+  useEffect(() => {
     try {
       const savedHistory = JSON.parse(localStorage.getItem("riwayat")) || [];
       setHistory(savedHistory);
@@ -57,8 +75,12 @@ function App() {
   const clearQuizSession = () => {
     sessionStorage.removeItem("quiz_questions");
     sessionStorage.removeItem("quiz_score");
+    sessionStorage.removeItem("quiz_streak");
+    sessionStorage.removeItem("quiz_max_streak");
     setQuestions([]);
     setScore(0);
+    setStreak(0);
+    setMaxStreak(0);
     setSelectedAnswer(null);
     setUseAnswer([]);
   };
@@ -79,6 +101,7 @@ function App() {
       id: Date.now(),
       score: `${finalScore}/${totalQuestions}`,
       rawScore: finalScore,
+      maxStreak: maxStreak,
       difficulty: difficulty || "Semua",
       category: category || "Semua",
       date: new Date().toLocaleString("id-ID"),
@@ -107,8 +130,16 @@ function App() {
   const handleAnswer = (answer, currentQuestion) => {
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correct_answer;
+
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
+      setStreak((prevStreak) => {
+        const newStreak = prevStreak + 1;
+        setMaxStreak((prevMax) => Math.max(prevMax, newStreak));
+        return newStreak;
+      });
+    } else {
+      setStreak(0);
     }
   };
 
@@ -188,6 +219,8 @@ function App() {
             setSelectedAnswer={setSelectedAnswer}
             onAnswer={handleAnswer}
             score={score}
+            streak={streak}
+            maxStreak={maxStreak}
             onSaveHistory={saveHistory}
             onRecordAnswer={handleUseAnswer}
           />
@@ -208,6 +241,7 @@ function App() {
         element={
           <Result
             score={score}
+            maxStreak={maxStreak}
             totalQuestions={questions.length}
             userAnswers={useAnswer}
             onViewLeaderboard={() => navigate("/leaderboard")}

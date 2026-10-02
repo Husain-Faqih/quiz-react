@@ -1,7 +1,48 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
-  // Hitung rasio skor
+  const [selectedCategory, setSelectedCategory] = useState("Semua");
+
+  const categories = [
+    "Semua",
+    ...new Set(history.map((item) => item.category).filter(Boolean)),
+  ];
+
+  const filteredHistory =
+    selectedCategory === "Semua"
+      ? history
+      : history.filter((item) => item.category === selectedCategory);
+
+  const totalQuiz = filteredHistory.length;
+
+  const getPercentage = (item) => {
+    if (
+      item?.score &&
+      typeof item.score === "string" &&
+      item.score.includes("/")
+    ) {
+      const [score, total] = item.score.split("/").map(Number);
+      return total > 0 ? (score / total) * 100 : 0;
+    }
+    return item?.rawScore || 0;
+  };
+
+  const averageScore =
+    totalQuiz > 0
+      ? (
+          filteredHistory.reduce((sum, item) => sum + getPercentage(item), 0) /
+          totalQuiz
+        ).toFixed(1)
+      : 0;
+
+  const highestScore =
+    totalQuiz > 0
+      ? Math.max(...filteredHistory.map((item) => getPercentage(item))).toFixed(
+          0,
+        )
+      : 0;
+
   const getRatio = (item) => {
     if (
       item?.score &&
@@ -14,14 +55,12 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
     return item?.rawScore || 0;
   };
 
-  // Mengurutkan riwayat
-  const sortedHistory = [...history].sort((a, b) => {
+  const sortedHistory = [...filteredHistory].sort((a, b) => {
     const ratioDiff = getRatio(b) - getRatio(a);
     if (ratioDiff !== 0) return ratioDiff;
     return (b.rawScore || 0) - (a.rawScore || 0);
   });
 
-  // Konfirmasi Hapus Semua
   const handleClearAllWithConfirm = () => {
     const isConfirmed = window.confirm("Yakin mau hapus semua riwayat kuis?");
     if (isConfirmed && typeof onClearHistory === "function") {
@@ -29,7 +68,6 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
     }
   };
 
-  // Konfirmasi Hapus Satu per Satu
   const handleDeleteItemWithConfirm = (targetId, originalIndex) => {
     const isConfirmed = window.confirm("Yakin mau hapus riwayat ini?");
     if (isConfirmed && typeof onDeleteItem === "function") {
@@ -39,7 +77,41 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
 
   return (
     <div className="quiz-container">
-      <h1 className="quiz-title">🏆 Leaderboard / Riwayat</h1>
+      <h1 className="quiz-title">🏆 Leaderboard & Riwayat</h1>
+
+      <div className="stats-container">
+        <div className="stats-title">📊 Statistik Ringkas</div>
+        <div className="stats-grid">
+          <div className="stat-box">
+            <span className="stat-label">Total Kuis</span>
+            <span className="stat-value">{totalQuiz}</span>
+          </div>
+          <div className="stat-box">
+            <span className="stat-label">Rata-rata</span>
+            <span className="stat-value">{averageScore}%</span>
+          </div>
+          <div className="stat-box">
+            <span className="stat-label">Tertinggi</span>
+            <span className="stat-value">{highestScore}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="filter-container">
+        <label htmlFor="category-select">Filter Kategori:</label>
+        <select
+          id="category-select"
+          className="filter-select"
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          {categories.map((cat, idx) => (
+            <option key={idx} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="leaderboard-section">
         {sortedHistory.length === 0 ? (
@@ -58,7 +130,6 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
                     {item.difficulty || "Semua"} | Tanggal: {item.date || "-"}
                   </div>
 
-                  {/* Tombol Hapus Satuan */}
                   <button
                     type="button"
                     className="delete-item-btn"
@@ -75,7 +146,7 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
           </ul>
         )}
 
-        {sortedHistory.length > 0 && (
+        {history.length > 0 && (
           <button
             type="button"
             className="clear-button"

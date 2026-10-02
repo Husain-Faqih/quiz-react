@@ -145,7 +145,12 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
             })}
           </ul>
         )}
+      </div>
 
+      <div className="action-footer">
+        <Link to="/" className="btn">
+          Kembali ke Pengaturan
+        </Link>
         {history.length > 0 && (
           <button
             type="button"
@@ -156,10 +161,6 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
           </button>
         )}
       </div>
-
-      <Link to="/" className="btn">
-        Kembali ke Pengaturan
-      </Link>
     </div>
   );
 }

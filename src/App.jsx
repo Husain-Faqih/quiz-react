@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Settings from "./components/Settings";
 import QuestionCard from "./components/QuestionCard";
 import Leaderboard from "./components/Leaderboard";
 import Result from "./components/Result";
 import NotFound from "./components/NotFound";
-import Loading from "./components/Loading"; // Import komponen Loading baru
+import Loading from "./components/Loading";
+import Home from "./components/Home";
 
 const shuffleArray = (array) => {
   const arr = [...array];
@@ -89,7 +89,7 @@ function App() {
   const handleUseAnswer = (answerData) => {
     setUseAnswer((prev) => {
       const isAlreadyRecorded = prev.some(
-        (item) => item.questionIndex === answerData.questionIndex
+        (item) => item.questionIndex === answerData.questionIndex,
       );
       if (isAlreadyRecorded) return prev;
       return [...prev, answerData];
@@ -148,26 +148,47 @@ function App() {
     setLoading(true);
     setError("");
 
-    let url = `https://opentdb.com/api.php?amount=${amount}`;
-    if (difficulty) url += `&difficulty=${difficulty}`;
-    if (category) url += `&category=${category}`;
+    let url = `https://opentdb.com/api.php?amount=${amount}&encode=url3986`;
+
+    // Hanya tambahkan jika difficulty valid di OpenDB (bukan extreme)
+    if (difficulty && difficulty !== "extreme") {
+      url += `&difficulty=${difficulty}`;
+    }
+    if (category) {
+      url += `&category=${category}`;
+    }
 
     fetch(url)
       .then((res) => {
-        if (!res.ok) throw new Error("Gagal terhubung ke server");
+        if (!res.ok) throw new Error("Gagal terhubung ke server OpenTDB.");
         return res.json();
       })
       .then((data) => {
         if (data.response_code !== 0) {
-          throw new Error("Soal tidak ditemukan untuk kombinasi ini.");
+          throw new Error(
+            "Soal tidak ditemukan untuk kombinasi ini. Coba kurangi jumlah soal atau ganti kategori.",
+          );
         }
-        const formatted = data.results.map((q) => ({
-          ...q,
-          shuffledAnswers: shuffleArray([
-            q.correct_answer,
-            ...q.incorrect_answers,
-          ]),
-        }));
+
+        // Format & decode karakter khusus
+        const formatted = data.results.map((q) => {
+          const decodedQuestion = decodeURIComponent(q.question);
+          const decodedCorrect = decodeURIComponent(q.correct_answer);
+          const decodedIncorrect = q.incorrect_answers.map((ans) =>
+            decodeURIComponent(ans),
+          );
+
+          return {
+            ...q,
+            question: decodedQuestion,
+            correct_answer: decodedCorrect,
+            incorrect_answers: decodedIncorrect,
+            shuffledAnswers: shuffleArray([
+              decodedCorrect,
+              ...decodedIncorrect,
+            ]),
+          };
+        });
 
         clearQuizSession();
         setQuestions(formatted);
@@ -186,32 +207,46 @@ function App() {
 
   if (error)
     return (
-      <div>
+      <div style={{ textAlign: "center", padding: "40px", color: "#fff" }}>
         <h1>❌ Gagal memuat soal</h1>
-        <p>{error}</p>
-        <button className="btn" onClick={fetchQuestions}>
-          Coba Lagi
+        <p style={{ margin: "16px 0", color: "#f87171" }}>{error}</p>
+        <button
+          className="btn"
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#0056b3",
+            color: "#fff",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+          onClick={() => setError("")}
+        >
+          Kembali ke Home
         </button>
       </div>
     );
 
   return (
     <Routes>
+      {/* Route Home Utama */}
       <Route
         path="/"
         element={
-          <Settings
+          <Home
             amount={amount}
             setAmount={setAmount}
             difficulty={difficulty}
             setDifficulty={setDifficulty}
             category={category}
             setCategory={setCategory}
-            onStart={fetchQuestions}
-            onViewLeaderboard={() => navigate("/leaderboard")}
+            maxStreak={maxStreak}
+            history={history} /* Ditambahkan prop history */
+            onStartQuiz={fetchQuestions}
           />
         }
       />
+
       <Route
         path="/quiz/:number"
         element={
@@ -228,6 +263,7 @@ function App() {
           />
         }
       />
+
       <Route
         path="/leaderboard"
         element={
@@ -238,6 +274,7 @@ function App() {
           />
         }
       />
+
       <Route
         path="/result"
         element={
@@ -251,6 +288,7 @@ function App() {
           />
         }
       />
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

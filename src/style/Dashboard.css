@@ -18,7 +18,6 @@
     margin-top: -16px;
 }
 
-/* Main Grid Layout */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr 1.8fr;
@@ -31,6 +30,16 @@
     }
 }
 
+.app-logo {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+}
+
+.app-logo:hover {
+    transform: scale(1.05);
+}
+
 .panel-title {
     font-size: 1.15rem;
     font-weight: 700;
@@ -40,7 +49,6 @@
     border-bottom: 1px solid var(--border-color);
 }
 
-/* Stats Panel */
 .stats-panel {
     display: flex;
     flex-direction: column;
@@ -121,7 +129,6 @@
     color: var(--success);
 }
 
-/* Settings Panel */
 .settings-panel {
     display: flex;
     flex-direction: column;
@@ -194,7 +201,6 @@
     font-size: 1rem;
 }
 
-/* Popular Categories Grid */
 .categories-section {
     display: flex;
     flex-direction: column;

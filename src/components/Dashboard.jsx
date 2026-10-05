@@ -1,4 +1,5 @@
 import React from "react";
+import Logo from "../assets/Logo.svg";
 import "../style/Dashboard.css";
 
 // Daftar Kategori Populer OpenTDB
@@ -36,7 +37,8 @@ export default function Dashboard({
   return (
     <div className="dashboard-container fade-in">
       <header className="dashboard-header">
-        <h1 className="quiz-title">Logo & Trivia Quiz</h1>
+        <img src={Logo} className="app-logo" alt="Logo Quiz" />
+        <h1 className="quiz-title">Trivia Quiz</h1>
         <p className="dashboard-subtitle">
           Uji pengetahuanmu dan cetak rekor streak tertinggi hari ini!
         </p>
@@ -79,7 +81,6 @@ export default function Dashboard({
         <div className="card settings-panel">
           <h2 className="panel-title">Quiz Settings</h2>
 
-          {/* Kategori Selector */}
           <div className="setting-group">
             <label className="setting-label">Category</label>
             <select

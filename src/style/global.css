@@ -33,7 +33,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -58,7 +57,6 @@ body {
     flex-direction: column;
 }
 
-/* Typography & Titles */
 .quiz-title {
     text-align: center;
     font-size: 1.75rem;
@@ -70,7 +68,6 @@ body {
     margin-bottom: 24px;
 }
 
-/* Reusable Cards */
 .card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -79,7 +76,6 @@ body {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* Buttons */
 .main-btn {
     background-color: var(--primary);
     color: var(--text-main);
@@ -131,7 +127,6 @@ body {
     cursor: not-allowed;
 }
 
-/* Badges & Pills */
 .badge {
     display: inline-flex;
     align-items: center;
@@ -145,7 +140,6 @@ body {
     border: 1px solid rgba(99, 102, 241, 0.3);
 }
 
-/* Review Cards */
 .review-card.correct-card {
     border-left: 4px solid var(--success);
 }
@@ -154,23 +148,18 @@ body {
     border-left: 4px solid var(--error);
 }
 
-/* Loading State */
 .loading-container {
-    position: fixed;
+    position: auto;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: var(--bg-main);
-    z-index: 9999;
     color: var(--text-main);
 }
 
-/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;

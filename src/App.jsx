@@ -6,6 +6,7 @@ import Result from "./components/Result";
 import NotFound from "./components/NotFound";
 import Loading from "./components/Loading";
 import Dashboard from "./components/Dashboard";
+import GuestHome from "./components/GuestHome";
 
 const shuffleArray = (array) => {
   const arr = [...array];
@@ -198,7 +199,7 @@ function App() {
 
   const handleReset = () => {
     clearQuizSession();
-    navigate("/");
+    navigate("/dashboard");
   };
 
   if (loading) return <Loading />;
@@ -229,6 +230,11 @@ function App() {
     <Routes>
       <Route
         path="/"
+        element={<GuestHome onGuestStart={() => navigate("/dashboard")} />}
+      />
+
+      <Route
+        path="/dashboard"
         element={
           <Dashboard
             amount={amount}

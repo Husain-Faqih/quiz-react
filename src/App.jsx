@@ -5,7 +5,7 @@ import History from "./components/History";
 import Result from "./components/Result";
 import NotFound from "./components/NotFound";
 import Loading from "./components/Loading";
-import Home from "./components/Home";
+import Dashboard from "./components/Dashboard";
 
 const shuffleArray = (array) => {
   const arr = [...array];
@@ -212,7 +212,7 @@ function App() {
           className="btn"
           style={{
             padding: "10px 20px",
-            backgroundColor: "#0056b3",
+            backgroundColor: "#2563eb",
             color: "#fff",
             border: "none",
             borderRadius: "8px",
@@ -220,7 +220,7 @@ function App() {
           }}
           onClick={() => setError("")}
         >
-          Kembali ke Home
+          Kembali ke Dashboard
         </button>
       </div>
     );
@@ -230,7 +230,7 @@ function App() {
       <Route
         path="/"
         element={
-          <Home
+          <Dashboard
             amount={amount}
             setAmount={setAmount}
             difficulty={difficulty}
@@ -238,7 +238,7 @@ function App() {
             category={category}
             setCategory={setCategory}
             maxStreak={maxStreak}
-            history={history} /* Ditambahkan prop history */
+            history={history}
             onStartQuiz={fetchQuestions}
           />
         }
@@ -262,7 +262,7 @@ function App() {
       />
 
       <Route
-        path="/History"
+        path="/history"
         element={
           <History
             history={history}
@@ -280,7 +280,7 @@ function App() {
             maxStreak={maxStreak}
             totalQuestions={questions.length}
             userAnswers={useAnswer}
-            onViewHistory={() => navigate("/History")}
+            onViewHistory={() => navigate("/history")}
             onReset={handleReset}
           />
         }

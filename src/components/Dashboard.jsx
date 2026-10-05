@@ -35,7 +35,6 @@ export default function Dashboard({
 }) {
   return (
     <div className="dashboard-container fade-in">
-      {/* Top Bar / Header Simple */}
       <header className="dashboard-header">
         <h1 className="quiz-title">Logo & Trivia Quiz</h1>
         <p className="dashboard-subtitle">
@@ -43,9 +42,7 @@ export default function Dashboard({
         </p>
       </header>
 
-      {/* Main Grid: Left Side (Stats & History) + Right Side (Settings) */}
       <div className="dashboard-grid">
-        {/* Panel Kiri: Stats & Recent History */}
         <div className="card stats-panel">
           <h2 className="panel-title">Leaderboard & Score</h2>
 
@@ -79,7 +76,6 @@ export default function Dashboard({
           </div>
         </div>
 
-        {/* Panel Kanan: Setting Quiz */}
         <div className="card settings-panel">
           <h2 className="panel-title">Quiz Settings</h2>
 
@@ -99,7 +95,6 @@ export default function Dashboard({
             </select>
           </div>
 
-          {/* Difficulty Selector */}
           <div className="setting-group">
             <label className="setting-label">Difficulty</label>
             <div className="options-grid">
@@ -118,7 +113,6 @@ export default function Dashboard({
             </div>
           </div>
 
-          {/* Questions Amount Selector */}
           <div className="setting-group">
             <label className="setting-label">Questions</label>
             <div className="options-grid">
@@ -135,14 +129,12 @@ export default function Dashboard({
             </div>
           </div>
 
-          {/* Start Button */}
           <button className="main-btn start-btn" onClick={onStartQuiz}>
             🚀 Start Quiz
           </button>
         </div>
       </div>
 
-      {/* Grid Bottom: Popular Categories Cards */}
       <section className="categories-section">
         <h2 className="section-title">Popular Categories</h2>
         <div className="categories-grid">

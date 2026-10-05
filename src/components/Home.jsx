@@ -22,7 +22,6 @@ export default function Home({
 
   return (
     <div className="main-layout">
-      {/* NAVBAR */}
       <header className="navbar">
         <div className="logo" onClick={() => navigate("/")}>
           ⚡ Logo Quiz
@@ -33,12 +32,10 @@ export default function Home({
         <button className="btn-login">Login/Signup</button>
       </header>
 
-      {/* MAIN CONTENT */}
       <main className="content-container">
         <div className="hero-grid">
-          {/* KOTAK KIRI: LEADERBOARD / SKORE */}
           <div className="card leaderboard-card">
-            <h3>Leaderboard / Skore</h3>
+            <h3>Leaderboard & Score</h3>
             <div className="user-score-badge">
               <span>🔥 Best Streak</span>
               <strong>{maxStreak}</strong>
@@ -61,11 +58,9 @@ export default function Home({
             </div>
           </div>
 
-          {/* KOTAK KANAN: SETTING (UTAMA) */}
           <div className="card setting-card">
             <h2 className="setting-title">Setting</h2>
             <form onSubmit={handleStart} className="setting-form">
-              {/* Kategori (Opsional Tambahan) */}
               <div className="setting-group">
                 <label>Category</label>
                 <select
@@ -81,7 +76,6 @@ export default function Home({
                 </select>
               </div>
 
-              {/* Difficulty Buttons */}
               <div className="setting-group">
                 <label>Difficulty</label>
                 <div className="pill-grid">
@@ -98,7 +92,6 @@ export default function Home({
                 </div>
               </div>
 
-              {/* Questions Amount Buttons */}
               <div className="setting-group">
                 <label>Questions</label>
                 <div className="pill-grid">
@@ -112,7 +105,6 @@ export default function Home({
                       {num}
                     </button>
                   ))}
-                  {/* Pilihan Custom Amount jika butuh */}
                   <input
                     type="number"
                     min="1"
@@ -124,7 +116,6 @@ export default function Home({
                 </div>
               </div>
 
-              {/* Tombol Start */}
               <button type="submit" className="btn-start-quiz">
                 Mulai Quiz
               </button>
@@ -132,7 +123,6 @@ export default function Home({
           </div>
         </div>
 
-        {/* SECTION BAWAH 1: Kategori Populer / Banner */}
         <section className="section-bar categories-bar">
           <h4>Kategori Populer</h4>
           <div className="category-tags">
@@ -143,7 +133,6 @@ export default function Home({
           </div>
         </section>
 
-        {/* SECTION BAWAH 2: Info / Banner Promo */}
         <section className="section-bar info-bar">
           <p>🚀 Tantang dirimu hari ini & pecahkan rekor streak terbanyak!</p>
         </section>

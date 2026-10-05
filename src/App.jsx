@@ -182,7 +182,6 @@ function App() {
     navigate("/");
   };
 
-  // Menggunakan Komponen Loading SVG
   if (loading) return <Loading />;
 
   if (error)

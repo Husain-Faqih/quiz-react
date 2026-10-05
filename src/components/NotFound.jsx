@@ -13,7 +13,7 @@ function NotFound() {
     return BACKGROUND_STYLES[randomIndex];
   }, []);
 
-  return (
+  return (  
     <div className="notfound-container" style={{ background: currentBg }}>
       <h1 className="notfound-title">404</h1>
       <h2 className="notfound-subtitle">Waduh, Kesasar Bro!</h2>

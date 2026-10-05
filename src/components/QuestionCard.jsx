@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback } from "react";
-import "../style/question.css"; // Pastikan CSS terimport
+import "../style/question.css";
 
 const decodeHTML = (text) => {
   if (!text) return "";
@@ -68,7 +68,7 @@ function QuestionCard({
 
   // Hitung Mundur Waktu
   useEffect(() => {
-    if (showFeedback) return;
+    if (showFeedback) return; 
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {

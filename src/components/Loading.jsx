@@ -1,4 +1,4 @@
-import loadingIcon from "../assets/loading.svg"; // Sesuaikan nama SVG lu
+import loadingIcon from "../assets/loading.svg";
 import "../style/global.css";
 
 export default function Loading() {

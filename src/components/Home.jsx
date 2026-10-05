@@ -24,10 +24,13 @@ export default function Home({
     <div className="main-layout">
       <header className="navbar">
         <div className="logo" onClick={() => navigate("/")}>
-          ⚡ Logo Quiz
+          Logo Quiz
         </div>
         <div className="search-container">
-          <input type="text" placeholder="Cari kuis, topik, atau kategori..." />
+          <input
+            type="text"
+            placeholder="Search for quizzes, topics, or categories..."
+          />
         </div>
         <button className="btn-login">Login/Signup</button>
       </header>
@@ -53,7 +56,7 @@ export default function Home({
                   </div>
                 ))
               ) : (
-                <p className="empty-text">Belum ada riwayat</p>
+                <p className="empty-text">No history yet</p>
               )}
             </div>
           </div>
@@ -68,7 +71,7 @@ export default function Home({
                   onChange={(e) => setCategory(e.target.value)}
                   className="select-category"
                 >
-                  <option value="">Semua Kategori</option>
+                  <option value="">All Categories</option>
                   <option value="9">General Knowledge</option>
                   <option value="18">Computers & IT</option>
                   <option value="21">Sports</option>
@@ -117,24 +120,27 @@ export default function Home({
               </div>
 
               <button type="submit" className="btn-start-quiz">
-                Mulai Quiz
+                Start Quiz
               </button>
             </form>
           </div>
         </div>
 
         <section className="section-bar categories-bar">
-          <h4>Kategori Populer</h4>
+          <h4>Popular Categories</h4>
           <div className="category-tags">
             <span onClick={() => setCategory("18")}>💻 IT & Tech</span>
-            <span onClick={() => setCategory("9")}>🧠 Pengetahuan Umum</span>
+            <span onClick={() => setCategory("9")}>🧠General knowledge</span>
             <span onClick={() => setCategory("31")}>⛩️ Anime</span>
-            <span onClick={() => setCategory("21")}>⚽ Olahraga</span>
+            <span onClick={() => setCategory("21")}>⚽ Sports</span>
           </div>
         </section>
 
         <section className="section-bar info-bar">
-          <p>🚀 Tantang dirimu hari ini & pecahkan rekor streak terbanyak!</p>
+          <p>
+            🚀 Challenge yourself today and break the record for the longest
+            streak!
+          </p>
         </section>
       </main>
     </div>

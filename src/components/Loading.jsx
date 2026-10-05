@@ -3,9 +3,15 @@ import "../style/global.css";
 
 export default function Loading() {
   return (
-    <div className="loading-container">
-      <img src={loadingIcon} className="spinner-anim" alt="Memuat soal..." />
-      <p>Memuat soal kuis...</p>
+    <div className="loading-wrapper">
+      <img
+        src={loadingIcon}
+        className="spin-animation"
+        alt="Loading questions..."
+      />
+      <p style={{ marginTop: "12px", fontSize: "1rem" }}>
+        Loading quiz questions...
+      </p>
     </div>
   );
 }

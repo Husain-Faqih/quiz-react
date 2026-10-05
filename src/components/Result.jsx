@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Result({
+  maxStreak,
   score,
   totalQuestions,
-  onViewLeaderboard,
+  onViewHistory,
   onReset,
   userAnswers = [],
 }) {
@@ -14,15 +15,15 @@ function Result({
     return (
       <div className="quiz-container empty-state-card">
         <div className="empty-state-icon">🧐</div>
-        <h2 className="quiz-title">Belum ada Hasil Quiz</h2>
+        <h2 className="quiz-title">No quiz results yet.</h2>
         <p className="feedback-message">
-          Kamu belum menyelesaikan quiz apapun. Yuk, pilih dan selesaikan quiz
-          kamu terlebih dahulu!
+          You haven't completed any quizzes yet. Go ahead and choose and
+          complete a quiz first!
         </p>
 
         <div className="empty-state-actions">
           <Link to="/" className="main-btn">
-            🚀 Mulai Quiz Sekarang
+            Start the Quiz Now
           </Link>
         </div>
       </div>
@@ -32,21 +33,32 @@ function Result({
   const percentage = Math.round((score / totalQuestions) * 100);
 
   const getFeedbackMessage = () => {
-    if (percentage === 100) return " ✨ Luar biasa! Kamu dapat nilai sempurna!";
-    if (percentage >= 75)
-      return " 👏 Kerja bagus! Hasil yang sangat memuaskan!";
+    if (percentage === 100) return " ✨Amazing! You got a perfect score!";
+    if (percentage >= 75) return " 👏Great job! A very satisfying result!";
     if (percentage >= 50) return " 👍 Lumayan! Masih bisa ditingkatkan lagi!";
-    return "💡 Jangan menyerah! Coba latihan lagi.";
+    return "💡 Don't give up! Try practicing again..";
   };
 
   return (
     <div className="quiz-container">
-      <h1 className="quiz-title">🎉 Quiz Selesai!</h1>
+      <h1 className="quiz-title">Quiz Finished!</h1>
 
       <div className="result-score-box">
         <h2 className="final-score">
-          Skor Kamu: <span>{score}</span> / {totalQuestions}
+          Your score: <span>{score}</span> / {totalQuestions}
         </h2>
+
+        <p
+          style={{
+            fontSize: "1rem",
+            color: "#f59e0b",
+            fontWeight: "bold",
+            margin: "6px 0",
+          }}
+        >
+          🔥 Best Streak: {maxStreak}
+        </p>
+
         <p className="feedback-message">{getFeedbackMessage()}</p>
       </div>
 
@@ -74,7 +86,7 @@ function Result({
                   <strong>Soal {index + 1}:</strong> {item.question}
                 </p>
                 <p style={{ margin: "4px 0", fontSize: "0.9rem" }}>
-                  Jawaban Kamu:{" "}
+                  Your Answer:{" "}
                   <span
                     style={{
                       fontWeight: "bold",
@@ -93,7 +105,7 @@ function Result({
                       fontSize: "0.9rem",
                     }}
                   >
-                    Jawaban Benar: <strong>{item.correctAnswer}</strong>
+                    Correct Answer: <strong>{item.correctAnswer}</strong>
                   </p>
                 )}
               </div>
@@ -103,12 +115,12 @@ function Result({
       )}
 
       <div className="action-buttons">
-        <button className="main-btn" onClick={onViewLeaderboard}>
-          🏆 Lihat Leaderboard
+        <button className="main-btn" onClick={onViewHistory}>
+          View History
         </button>
 
         <button className="secondary-btn" onClick={onReset}>
-          Atur Quiz Baru
+          Set Up a New Quiz
         </button>
       </div>
     </div>

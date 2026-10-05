@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import QuestionCard from "./components/QuestionCard";
-import Leaderboard from "./components/Leaderboard";
+import History from "./components/History";
 import Result from "./components/Result";
 import NotFound from "./components/NotFound";
 import Loading from "./components/Loading";
@@ -150,7 +150,6 @@ function App() {
 
     let url = `https://opentdb.com/api.php?amount=${amount}&encode=url3986`;
 
-    // Hanya tambahkan jika difficulty valid di OpenDB (bukan extreme)
     if (difficulty && difficulty !== "extreme") {
       url += `&difficulty=${difficulty}`;
     }
@@ -170,7 +169,6 @@ function App() {
           );
         }
 
-        // Format & decode karakter khusus
         const formatted = data.results.map((q) => {
           const decodedQuestion = decodeURIComponent(q.question);
           const decodedCorrect = decodeURIComponent(q.correct_answer);
@@ -229,7 +227,6 @@ function App() {
 
   return (
     <Routes>
-      {/* Route Home Utama */}
       <Route
         path="/"
         element={
@@ -265,9 +262,9 @@ function App() {
       />
 
       <Route
-        path="/leaderboard"
+        path="/History"
         element={
-          <Leaderboard
+          <History
             history={history}
             onDeleteItem={handleDeleteHistoryItem}
             onClearHistory={handleClearHistory}
@@ -283,7 +280,7 @@ function App() {
             maxStreak={maxStreak}
             totalQuestions={questions.length}
             userAnswers={useAnswer}
-            onViewLeaderboard={() => navigate("/leaderboard")}
+            onViewHistory={() => navigate("/History")}
             onReset={handleReset}
           />
         }

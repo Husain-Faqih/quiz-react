@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
+function History({ history = [], onDeleteItem, onClearHistory }) {
   const [selectedCategory, setSelectedCategory] = useState("Semua");
 
   const categories = [
@@ -62,14 +62,18 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
   });
 
   const handleClearAllWithConfirm = () => {
-    const isConfirmed = window.confirm("Yakin mau hapus semua riwayat kuis?");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete all quiz history??",
+    );
     if (isConfirmed && typeof onClearHistory === "function") {
       onClearHistory();
     }
   };
 
   const handleDeleteItemWithConfirm = (targetId, originalIndex) => {
-    const isConfirmed = window.confirm("Yakin mau hapus riwayat ini?");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this history??",
+    );
     if (isConfirmed && typeof onDeleteItem === "function") {
       onDeleteItem(targetId, originalIndex);
     }
@@ -77,28 +81,28 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
 
   return (
     <div className="quiz-container">
-      <h1 className="quiz-title">🏆 Leaderboard & Riwayat</h1>
+      <h1 className="quiz-title">History</h1>
 
       <div className="stats-container">
-        <div className="stats-title">📊 Statistik Ringkas</div>
+        <div className="stats-title">📊 Summary Statistics</div>
         <div className="stats-grid">
           <div className="stat-box">
-            <span className="stat-label">Total Kuis</span>
+            <span className="stat-label">Total Quizzes</span>
             <span className="stat-value">{totalQuiz}</span>
           </div>
           <div className="stat-box">
-            <span className="stat-label">Rata-rata</span>
+            <span className="stat-label">Average</span>
             <span className="stat-value">{averageScore}%</span>
           </div>
           <div className="stat-box">
-            <span className="stat-label">Tertinggi</span>
+            <span className="stat-label">Highest</span>
             <span className="stat-value">{highestScore}%</span>
           </div>
         </div>
       </div>
 
       <div className="filter-container">
-        <label htmlFor="category-select">Filter Kategori:</label>
+        <label htmlFor="category-select">Category Filter:</label>
         <select
           id="category-select"
           className="filter-select"
@@ -115,7 +119,7 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
 
       <div className="leaderboard-section">
         {sortedHistory.length === 0 ? (
-          <p className="empty-message">Belum ada riwayat tersimpan.</p>
+          <p className="empty-message">No history saved yet.</p>
         ) : (
           <ul className="history-list">
             {sortedHistory.map((item, index) => {
@@ -125,9 +129,9 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
               return (
                 <li key={uniqueKey}>
                   <div>
-                    <strong>Skor: {item.score || 0}</strong> | Kategori:{" "}
-                    {item.category || "Semua"} | Kesulitan:{" "}
-                    {item.difficulty || "Semua"} | Tanggal: {item.date || "-"}
+                    <strong>Score: {item.score || 0}</strong> | Categori:{" "}
+                    {item.category || "All"} | Difficulty:{" "}
+                    {item.difficulty || "All"} | Date: {item.date || "-"}
                   </div>
 
                   <button
@@ -149,7 +153,7 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
 
       <div className="action-footer">
         <Link to="/" className="btn">
-          Kembali ke Pengaturan
+          Return to Settings
         </Link>
         {history.length > 0 && (
           <button
@@ -157,7 +161,7 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
             className="clear-button"
             onClick={handleClearAllWithConfirm}
           >
-            🗑️ Hapus Semua Riwayat
+            🗑️ Clear All History
           </button>
         )}
       </div>
@@ -165,4 +169,4 @@ function Leaderboard({ history = [], onDeleteItem, onClearHistory }) {
   );
 }
 
-export default Leaderboard;
+export default History;

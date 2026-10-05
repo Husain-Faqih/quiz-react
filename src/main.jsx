@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./style/global.css";
-import "./style/leaderboard.css";
+import "./style/History.css";
 import "./style/question.css";
 import "./style/setting.css";
 import "./style/result.css";
@@ -13,6 +13,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
-    </BrowserRouter>  
+    </BrowserRouter>
   </React.StrictMode>,
 );

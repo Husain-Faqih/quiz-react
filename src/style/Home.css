@@ -39,10 +39,15 @@
     background-color: #d1d5db;
     color: #1f2937;
     padding: 6px 16px;
-    border-radius: 12px;
+    border-radius: 8px;
     border: none;
     font-weight: bold;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-login:hover {
+    background: #94a3b8;
 }
 
 .content-container {
@@ -53,7 +58,6 @@
     flex-direction: column;
     gap: 20px;
     box-sizing: border-box;
-    /* Mencegah overflow horizontal */
 }
 
 .hero-grid {
@@ -133,7 +137,7 @@
 
 .pill-btn {
     background-color: #e2e8f0;
-    color: #1e293b;
+    color: #3d73c9;
     border: none;
     padding: 8px;
     border-radius: 20px;

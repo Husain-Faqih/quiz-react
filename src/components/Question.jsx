@@ -13,7 +13,7 @@ function QuestionCard({
   selectedAnswer,
   onAnswer,
   score,
-  streak = 0, // Props streak baru
+  streak = 0,
   onSaveHistory,
   setSelectedAnswer,
   onRecordAnswer,
@@ -58,7 +58,7 @@ function QuestionCard({
 
   useEffect(() => {
     setTimeLeft(15);
-    setCardAnimation("slide-in"); // Trigger animasi slide-in saat nomor berubah
+    setCardAnimation("slide-in");
 
     if (autoNextTimerRef.current) {
       clearTimeout(autoNextTimerRef.current);
@@ -66,7 +66,6 @@ function QuestionCard({
     }
   }, [number]);
 
-  // Hitung Mundur Waktu
   useEffect(() => {
     if (showFeedback) return; 
 

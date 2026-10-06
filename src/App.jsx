@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import QuestionCard from "./components/QuestionCard";
+import Question from "./components/Question";
+import CustomSoal from "./components/CustomSoal";
 import History from "./components/History";
 import Result from "./components/Result";
 import NotFound from "./components/NotFound";
@@ -250,10 +251,12 @@ function App() {
         }
       />
 
+      <Route path="/buat-soal" element={<CustomSoal />} />
+
       <Route
         path="/quiz/:number"
         element={
-          <QuestionCard
+          <Question
             questions={questions}
             selectedAnswer={selectedAnswer}
             setSelectedAnswer={setSelectedAnswer}

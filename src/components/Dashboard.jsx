@@ -1,8 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Logo from "../assets/Logo.svg";
 import "../style/Dashboard.css";
 
-// Daftar Kategori Populer OpenTDB
 const POPULAR_CATEGORIES = [
   { id: "", name: "Semua Kategori", icon: "🌐", count: "All" },
   { id: "18", name: "Computers & IT", icon: "💻", count: "100+ Soal" },
@@ -133,6 +133,10 @@ export default function Dashboard({
           <button className="main-btn start-btn" onClick={onStartQuiz}>
             🚀 Start Quiz
           </button>
+
+          <Link to="/buat-soal" className="btn-custom-quiz">
+            ➕ Buat Soal
+          </Link>
         </div>
       </div>
 

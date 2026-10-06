@@ -8,7 +8,7 @@ const decodeHTML = (text) => {
   return doc.body.textContent;
 };
 
-function QuestionCard({
+function Question({
   questions = [],
   selectedAnswer,
   onAnswer,
@@ -67,7 +67,7 @@ function QuestionCard({
   }, [number]);
 
   useEffect(() => {
-    if (showFeedback) return; 
+    if (showFeedback) return;
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -255,4 +255,4 @@ function QuestionCard({
   );
 }
 
-export default QuestionCard;
+export default Question;

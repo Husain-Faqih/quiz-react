@@ -4,138 +4,120 @@ import "../style/CustomSoal.css";
 export default function CustomSoal() {
   const [formData, setFormData] = useState({
     question: "",
-    correctAnswer: "",
-    incorrectAnswers: ["", "", ""],
+    options: ["", "", "", ""],
+    correctAnswerIndex: 0,
   });
 
-  const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleQuestionChange = (e) => {
     setFormData({ ...formData, question: e.target.value });
   };
 
-  const handleCorrectAnswerChange = (e) => {
-    setFormData({ ...formData, correctAnswer: e.target.value });
-  };
-
-  const handleIncorrectAnswerChange = (index, value) => {
-    const updatedIncorrect = [...formData.incorrectAnswers];
-    updatedIncorrect[index] = value;
-    setFormData({ ...formData, incorrectAnswers: updatedIncorrect });
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.question.trim()) {
-      newErrors.question = "Pertanyaan tidak boleh kosong.";
-    }
-
-    if (!formData.correctAnswer.trim()) {
-      newErrors.correctAnswer = "Jawaban benar wajib diisi.";
-    }
-
-    const hasEmptyIncorrect = formData.incorrectAnswers.some(
-      (ans) => !ans.trim(),
-    );
-    if (hasEmptyIncorrect) {
-      newErrors.incorrectAnswers = "Semua pilihan jawaban salah harus diisi.";
-    }
-
-    return newErrors;
+  const handleOptionChange = (index, value) => {
+    const updatedOptions = [...formData.options];
+    updatedOptions[index] = value;
+    setFormData({ ...formData, options: updatedOptions });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSuccessMessage("");
 
-    const validationErrors = validateForm();
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-    } else {
-      setErrors({});
-
-      const newQuestionData = {
-        question: formData.question,
-        correct_answer: formData.correctAnswer,
-        incorrect_answers: formData.incorrectAnswers,
-        category: "Custom",
-      };
-
-      console.log("Data Soal Custom Created:", newQuestionData);
-      setSuccessMessage("Soal berhasil dibuat!");
-
-      setFormData({
-        question: "",
-        correctAnswer: "",
-        incorrectAnswers: ["", "", ""],
-      });
+    if (!formData.question.trim()) {
+      alert("Pertanyaan tidak boleh kosong!");
+      return;
     }
+
+    if (formData.options.some((opt) => !opt.trim())) {
+      alert("Semua 4 pilihan jawaban harus diisi!");
+      return;
+    }
+
+    const correctAnswer = formData.options[formData.correctAnswerIndex];
+    const incorrectAnswers = formData.options.filter(
+      (_, idx) => idx !== formData.correctAnswerIndex,
+    );
+
+    const newQuestionData = {
+      question: formData.question,
+      correct_answer: correctAnswer,
+      incorrect_answers: incorrectAnswers,
+      category: "Custom",
+    };
+
+    console.log("Soal Berhasil Disimpan:", newQuestionData);
+    setSuccessMessage("✨ Soal custom berhasil disimpan!");
+
+    setTimeout(() => setSuccessMessage(""), 3000);
   };
 
-  return (
-    <div className="custom-soal-container">
-      <h2 className="custom-soal-title">✨ Buat Soal Custom</h2>
+  const labels = ["A", "B", "C", "D"];
 
-      <form onSubmit={handleSubmit} className="custom-soal-form">
-        <div className="form-group">
-          <label className="form-label">Pertanyaan:</label>
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Masukkan pertanyaan kuis..."
+  return (
+    <div className="custom-soal-page">
+      <div className="quiz-card-container">
+        {/* Meta Atas */}
+        <div className="card-header-meta">
+          <span className="category-badge">Custom Knowledge</span>
+          <span className="soal-counter">
+            Soal <strong>1</strong> dari 10
+          </span>
+        </div>
+
+        <div className="timer-text">⏳ Sisa Waktu: -- detik</div>
+        <div className="progress-bar-bg">
+          <div className="progress-bar-fill"></div>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <textarea
+            className="question-field"
+            placeholder="Tuliskan pertanyaan kuis kamu di sini..."
+            rows={2}
             value={formData.question}
             onChange={handleQuestionChange}
           />
-          {errors.question && <p className="error-text">{errors.question}</p>}
-        </div>
 
-        <div className="form-group">
-          <label className="form-label">Jawaban Benar:</label>
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Jawaban yang benar..."
-            value={formData.correctAnswer}
-            onChange={handleCorrectAnswerChange}
-          />
-          {errors.correctAnswer && (
-            <p className="error-text">{errors.correctAnswer}</p>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">
-            Pilihan Jawaban Salah (3 Pilihan):
-          </label>
-          <div className="incorrect-answers-grid">
-            {formData.incorrectAnswers.map((ans, idx) => (
-              <input
+          <div className="options-list">
+            {formData.options.map((opt, idx) => (
+              <div
                 key={idx}
-                type="text"
-                className="form-input"
-                placeholder={`Jawaban salah ${idx + 1}`}
-                value={ans}
-                onChange={(e) =>
-                  handleIncorrectAnswerChange(idx, e.target.value)
-                }
-              />
+                className={`option-item ${
+                  formData.correctAnswerIndex === idx
+                    ? "is-correct-selected"
+                    : ""
+                }`}
+              >
+                <div
+                  className="option-badge"
+                  onClick={() =>
+                    setFormData({ ...formData, correctAnswerIndex: idx })
+                  }
+                  title="Klik abjad untuk menjadikan ini Jawaban Benar"
+                >
+                  {labels[idx]}
+                </div>
+                <input
+                  type="text"
+                  className="option-input"
+                  placeholder={`Ketik Pilihan ${labels[idx]}...`}
+                  value={opt}
+                  onChange={(e) => handleOptionChange(idx, e.target.value)}
+                />
+              </div>
             ))}
           </div>
-          {errors.incorrectAnswers && (
-            <p className="error-text">{errors.incorrectAnswers}</p>
-          )}
-        </div>
 
-        <button type="submit" className="submit-btn">
-          💾 Simpan Soal
-        </button>
-      </form>
-
-      {/* Pesan Sukses */}
-      {successMessage && <div className="success-banner">{successMessage}</div>}
+          <div className="action-footer">
+            {successMessage && (
+              <span className="success-text">{successMessage}</span>
+            )}
+            <button type="submit" className="btn-save-soal">
+              Simpan Soal
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

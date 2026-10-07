@@ -191,3 +191,17 @@
     background-color: #4338ca;
     transform: translateY(-1px);
 }
+
+.btn-back {
+    background: transparent;
+    border: 1px solid rgba(255, 255,255, 0.2);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-back:hover{
+    background: rgba(255, 255,255, 0.1);
+}

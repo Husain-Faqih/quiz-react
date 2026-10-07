@@ -135,7 +135,7 @@ export default function Dashboard({
           </button>
 
           <Link to="/buat-soal" className="btn-custom-quiz">
-            ➕ Buat Soal
+            Buat Soal
           </Link>
         </div>
       </div>

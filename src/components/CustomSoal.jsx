@@ -1,13 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 1. Tambahkan import ini
 import "../style/CustomSoal.css";
 
 export default function CustomSoal() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     question: "",
     options: ["", "", "", ""],
-    correctAnswerIndex: 0,
+    correctAnswerIndex: null,
   });
 
+  const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleQuestionChange = (e) => {
@@ -22,16 +26,29 @@ export default function CustomSoal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setSuccessMessage("");
+
+    const newErrors = {};
 
     if (!formData.question.trim()) {
-      alert("Pertanyaan tidak boleh kosong!");
-      return;
+      newErrors.question = "Pertanyaan tidak boleh kosong!";
     }
 
     if (formData.options.some((opt) => !opt.trim())) {
-      alert("Semua 4 pilihan jawaban harus diisi!");
+      newErrors.options = "Semua 4 pilihan jawaban harus diisi!";
+    }
+
+    if (formData.correctAnswerIndex === null) {
+      newErrors.correctAnswerIndex =
+        "Klik abjad (A/B/C/D) untuk memilih jawaban yang benar!";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
+
+    setErrors({});
 
     const correctAnswer = formData.options[formData.correctAnswerIndex];
     const incorrectAnswers = formData.options.filter(
@@ -39,16 +56,32 @@ export default function CustomSoal() {
     );
 
     const newQuestionData = {
-      question: formData.question,
+      question: formData.question.trim(),
       correct_answer: correctAnswer,
       incorrect_answers: incorrectAnswers,
       category: "Custom",
     };
 
-    console.log("Soal Berhasil Disimpan:", newQuestionData);
-    setSuccessMessage("✨ Soal custom berhasil disimpan!");
+    try {
+      const existingQuestions =
+        JSON.parse(localStorage.getItem("custom_questions")) || [];
+      const updatedQuestions = [...existingQuestions, newQuestionData];
+      localStorage.setItem(
+        "custom_questions",
+        JSON.stringify(updatedQuestions),
+      );
 
-    setTimeout(() => setSuccessMessage(""), 3000);
+      setFormData({
+        question: "",
+        options: ["", "", "", ""],
+        correctAnswerIndex: null,
+      });
+
+      setSuccessMessage("✨ Soal custom berhasil disimpan ke localStorage!");
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (err) {
+      console.error("Gagal menyimpan ke localStorage:", err);
+    }
   };
 
   const labels = ["A", "B", "C", "D"];
@@ -56,8 +89,15 @@ export default function CustomSoal() {
   return (
     <div className="custom-soal-page">
       <div className="quiz-card-container">
-        {/* Meta Atas */}
         <div className="card-header-meta">
+          {/* 3. Panggil navigate(-1) untuk kembali ke halaman sebelumnya */}
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="btn-back"
+          >
+            ← Kembali
+          </button>
           <span className="category-badge">Custom Knowledge</span>
           <span className="soal-counter">
             Soal <strong>1</strong> dari 10
@@ -77,6 +117,19 @@ export default function CustomSoal() {
             value={formData.question}
             onChange={handleQuestionChange}
           />
+          {errors.question && (
+            <p
+              className="error-text"
+              style={{
+                color: "#f87171",
+                fontSize: "14px",
+                marginTop: "-8px",
+                marginBottom: "12px",
+              }}
+            >
+              {errors.question}
+            </p>
+          )}
 
           <div className="options-list">
             {formData.options.map((opt, idx) => (
@@ -90,9 +143,9 @@ export default function CustomSoal() {
               >
                 <div
                   className="option-badge"
-                  onClick={() =>
-                    setFormData({ ...formData, correctAnswerIndex: idx })
-                  }
+                  onClick={() => {
+                    setFormData({ ...formData, correctAnswerIndex: idx });
+                  }}
                   title="Klik abjad untuk menjadikan ini Jawaban Benar"
                 >
                   {labels[idx]}
@@ -108,7 +161,24 @@ export default function CustomSoal() {
             ))}
           </div>
 
-          <div className="action-footer">
+          {errors.options && (
+            <p
+              className="error-text"
+              style={{ color: "#f87171", fontSize: "14px", marginTop: "8px" }}
+            >
+              {errors.options}
+            </p>
+          )}
+          {errors.correctAnswerIndex && (
+            <p
+              className="error-text"
+              style={{ color: "#f87171", fontSize: "14px", marginTop: "4px" }}
+            >
+              {errors.correctAnswerIndex}
+            </p>
+          )}
+
+          <div className="action-footer" style={{ marginTop: "16px" }}>
             {successMessage && (
               <span className="success-text">{successMessage}</span>
             )}

@@ -201,6 +201,11 @@
     font-size: 1rem;
 }
 
+.btn-custom-quiz {
+    text-decoration: none;
+    color: #ffffff;
+}
+
 .categories-section {
     display: flex;
     flex-direction: column;

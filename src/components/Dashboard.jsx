@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/Logo.svg";
 import "../style/Dashboard.css";
@@ -131,11 +130,11 @@ export default function Dashboard({
           </div>
 
           <button className="main-btn start-btn" onClick={onStartQuiz}>
-            🚀 Start Quiz
+            Start Quiz
           </button>
 
           <Link to="/buat-soal" className="btn-custom-quiz">
-            Buat Soal
+            Custom Soal
           </Link>
         </div>
       </div>

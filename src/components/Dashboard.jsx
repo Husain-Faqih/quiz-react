@@ -127,15 +127,20 @@ export default function Dashboard({
                 </button>
               ))}
             </div>
-          </div>
+          </div>  
 
           <button className="main-btn start-btn" onClick={onStartQuiz}>
             Start Quiz
           </button>
+          <div className="custom-soal-container">
+            <Link to="/buat-soal" className="btn-custom-quiz">
+              Custom Soal
+            </Link>
 
-          <Link to="/buat-soal" className="btn-custom-quiz">
-            Custom Soal
-          </Link>
+            <Link to="/daftar-soal" className="btn-daftar-soal">
+              Daftar Soal
+            </Link>
+          </div>
         </div>
       </div>
 

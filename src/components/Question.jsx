@@ -181,15 +181,18 @@ function Question({
       )}
 
       <div className="quiz-header">
-        <div className="quiz-info">
-          <span className="badge">{currentQuestion.category}</span>
-          <span className="question-count">
-            Soal <strong>{currentIndex + 1}</strong> dari {totalQuestions}
-          </span>
+        <div className="quiz-header-top">
+          <div className="quiz-info">
+            <span className="badge">{currentQuestion.category}</span>
+            <span className="question-count">
+              Soal <strong>{currentIndex + 1}</strong> dari {totalQuestions}
+            </span>
+          </div>
+          <div className="timer-badge">
+            ⌛ Sisa Waktu: <strong>{timeLeft}</strong> detik
+          </div>
         </div>
-        <div className="timer-badge">
-          ⌛ Sisa Waktu: <strong>{timeLeft}</strong> detik
-        </div>
+
         <div className="progres-bar-background">
           <div
             className="progress-bar-fill"

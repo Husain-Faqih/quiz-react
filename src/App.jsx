@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Question from "./components/Question";
 import CustomSoal from "./components/CustomSoal";
+import DaftarSoal from "./components/DaftarSoal";
 import History from "./components/History";
 import Result from "./components/Result";
 import NotFound from "./components/NotFound";
@@ -252,6 +253,7 @@ function App() {
       />
 
       <Route path="/buat-soal" element={<CustomSoal />} />
+      <Route path="/daftar-soal" element={<DaftarSoal />} />
 
       <Route
         path="/quiz/:number"

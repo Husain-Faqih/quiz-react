@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // 1. Tambahkan import ini
+import { useNavigate } from "react-router-dom";
 import "../style/CustomSoal.css";
 
 export default function CustomSoal() {
@@ -90,7 +90,6 @@ export default function CustomSoal() {
     <div className="custom-soal-page">
       <div className="quiz-card-container">
         <div className="card-header-meta">
-          {/* 3. Panggil navigate(-1) untuk kembali ke halaman sebelumnya */}
           <button
             type="button"
             onClick={() => navigate(-1)}

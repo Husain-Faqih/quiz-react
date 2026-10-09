@@ -95,15 +95,15 @@ export default function CustomSoal() {
             onClick={() => navigate(-1)}
             className="btn-back"
           >
-            ← Kembali
+            ← back
           </button>
           <span className="category-badge">Custom Knowledge</span>
           <span className="soal-counter">
-            Soal <strong>1</strong> from 10
+            Question <strong>1</strong> from 10
           </span>
         </div>
 
-        <div className="timer-text">⏳ Sisa Waktu:...</div>
+        <div className="timer-text">⏳ Time ...</div>
         <div className="progress-bar-bg">
           <div className="progress-bar-fill"></div>
         </div>

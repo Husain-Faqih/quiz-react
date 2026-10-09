@@ -31,16 +31,16 @@ export default function CustomSoal() {
     const newErrors = {};
 
     if (!formData.question.trim()) {
-      newErrors.question = "Pertanyaan tidak boleh kosong!";
+      newErrors.question = "The question cannot be left blank!";
     }
 
     if (formData.options.some((opt) => !opt.trim())) {
-      newErrors.options = "Semua 4 pilihan jawaban harus diisi!";
+      newErrors.options = "All 4 answer choices must be filled in!";
     }
 
     if (formData.correctAnswerIndex === null) {
       newErrors.correctAnswerIndex =
-        "Klik abjad (A/B/C/D) untuk memilih jawaban yang benar!";
+        "Click the letter (A/B/C/D) to select the correct answer!";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -77,10 +77,10 @@ export default function CustomSoal() {
         correctAnswerIndex: null,
       });
 
-      setSuccessMessage("✨ Soal custom berhasil disimpan ke localStorage!");
+      setSuccessMessage("The custom question was successfully saved to localStorage!");
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      console.error("Gagal menyimpan ke localStorage:", err);
+      console.error("Failed to save to localStorage:", err);
     }
   };
 
@@ -99,11 +99,11 @@ export default function CustomSoal() {
           </button>
           <span className="category-badge">Custom Knowledge</span>
           <span className="soal-counter">
-            Soal <strong>1</strong> dari 10
+            Soal <strong>1</strong> from 10
           </span>
         </div>
 
-        <div className="timer-text">⏳ Sisa Waktu: -- detik</div>
+        <div className="timer-text">⏳ Sisa Waktu:...</div>
         <div className="progress-bar-bg">
           <div className="progress-bar-fill"></div>
         </div>
@@ -111,7 +111,7 @@ export default function CustomSoal() {
         <form onSubmit={handleSubmit}>
           <textarea
             className="question-field"
-            placeholder="Tuliskan pertanyaan kuis kamu di sini..."
+            placeholder="Write your quiz question here..."
             rows={2}
             value={formData.question}
             onChange={handleQuestionChange}
@@ -145,7 +145,7 @@ export default function CustomSoal() {
                   onClick={() => {
                     setFormData({ ...formData, correctAnswerIndex: idx });
                   }}
-                  title="Klik abjad untuk menjadikan ini Jawaban Benar"
+                  title="Click the letter to mark this as the correct answer"
                 >
                   {labels[idx]}
                 </div>
@@ -182,7 +182,7 @@ export default function CustomSoal() {
               <span className="success-text">{successMessage}</span>
             )}
             <button type="submit" className="btn-save-soal">
-              Simpan Soal
+              Saved question
             </button>
           </div>
         </form>

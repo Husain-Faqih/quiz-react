@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom"; // 1. Tambahkan useNavigat
 import "../style/DaftarSoal.css";
 
 function DaftarSoal() {
-  const navigate = useNavigate(); // 2. Inisialisasi navigate
+  const navigate = useNavigate();
   const [customQuestions, setCustomQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [quizTitle, setQuizTitle] = useState("");

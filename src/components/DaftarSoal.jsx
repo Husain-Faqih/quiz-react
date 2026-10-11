@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // 1. Tambahkan useNavigate di sini
 import "../style/DaftarSoal.css";
+
 function DaftarSoal() {
+  const navigate = useNavigate(); // 2. Inisialisasi navigate
   const [customQuestions, setCustomQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [quizTitle, setQuizTitle] = useState("");
@@ -38,6 +40,23 @@ function DaftarSoal() {
     0,
   );
 
+  const handleDelete = (indexToDelete) => {
+    const updateQuestions = customQuestions.filter(
+      (_, index) => index !== indexToDelete,
+    );
+    setCustomQuestions(updateQuestions);
+    localStorage.setItem("custom_questions", JSON.stringify(updateQuestions));
+  };
+
+  const handleEdit = (indexToEdit) => {
+    const targetQuestion = customQuestions[indexToEdit];
+    localStorage.setItem(
+      "edit_question_data",
+      JSON.stringify({ ...targetQuestion, editIndex: indexToEdit }),
+    );
+    navigate("/buat-soal");
+  };
+
   if (isLoading) {
     return <div className="quiz-editor-container">Memuat data...</div>;
   }
@@ -53,7 +72,7 @@ function DaftarSoal() {
             type="text"
             className="quiz-title-input"
             value={quizTitle}
-            placeholder="Untiled Quiz"
+            placeholder="Untitled Quiz"
             onChange={(e) => setQuizTitle(e.target.value)}
           />
         </div>
@@ -91,21 +110,40 @@ function DaftarSoal() {
       ) : (
         <div className="questions-grid">
           {customQuestions.map((q, index) => {
-            const incorrects = Array.isArray(q.incorrectAnswers)
-              ? q.incorrectAnswers
-              : [];
-            const allOptions = [q.correctAnswer, ...incorrects];
+            const allOptions = Array.isArray(q.options) ? q.options : [];
 
             return (
               <div key={q.id || index} className="question-card">
+                {/* Container Tombol Aksi: Pensil (Edit) di kiri, Tempat Sampah (Delete) di kanan */}
+                <div className="card-actions">
+                  <button
+                    type="button"
+                    className="btn-action btn-edit"
+                    onClick={() => handleEdit(index)}
+                    title="Edit soal ini"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-action btn-delete"
+                    onClick={() => handleDelete(index)}
+                    title="Hapus soal ini"
+                  >
+                    🗑️
+                  </button>
+                </div>
+
                 <div className="card-number">{index + 1}</div>
                 <div className="card-text">{q.question}</div>
 
                 <div className="answers-grid">
                   {allOptions.map((optionText, optIdx) => {
-                    const isCorrect = optionText === q.correctAnswer;
+                    const isCorrect = optIdx === Number(q.correctAnswerIndex);
+
                     return (
                       <div key={optIdx} className="answer-option">
+                        <span className="option-text">{optionText}</span>
                         <span
                           className={`radio-dot ${isCorrect ? "correct" : ""}`}
                         />

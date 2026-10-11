@@ -57,8 +57,9 @@ export default function CustomSoal() {
 
     const newQuestionData = {
       question: formData.question.trim(),
-      correct_answer: correctAnswer,
-      incorrect_answers: incorrectAnswers,
+      options: formData.options,
+      correctAnswerIndex: formData.correctAnswerIndex,
+      correct_answer: formData.options[formData.correctAnswerIndex],
       category: "Custom",
     };
 

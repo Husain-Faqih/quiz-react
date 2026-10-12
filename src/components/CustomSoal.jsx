@@ -78,7 +78,9 @@ export default function CustomSoal() {
         correctAnswerIndex: null,
       });
 
-      setSuccessMessage("The custom question was successfully saved to localStorage!");
+      setSuccessMessage(
+        "The custom question was successfully saved to localStorage!",
+      );
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       console.error("Failed to save to localStorage:", err);
@@ -94,9 +96,9 @@ export default function CustomSoal() {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="btn-back"
+            className="btn-kembali"
           >
-            ← back
+            ⬅
           </button>
           <span className="category-badge">Custom Knowledge</span>
           <span className="soal-counter">

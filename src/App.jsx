@@ -160,19 +160,22 @@ function App() {
       url += `&category=${category}`;
     }
 
-    fetch(url)
-      .then((res) => {
+    Promise.all([
+      fetch(url).then((res) => {
         if (!res.ok) throw new Error("Gagal terhubung ke server OpenTDB.");
         return res.json();
-      })
-      .then((data) => {
-        if (data.response_code !== 0) {
+      }),
+      Promise.resolve(localStorage.getItem("custom_questions")), // Perhatikan huruf kecil 'c' sesuai standar key localstorage kamu sebelumnya
+    ])
+      .then(([apiData, localData]) => {
+        if (apiData.response_code !== 0) {
           throw new Error(
             "Soal tidak ditemukan untuk kombinasi ini. Coba kurangi jumlah soal atau ganti kategori.",
           );
         }
 
-        const formatted = data.results.map((q) => {
+        // 1. Format soal dari API
+        const formattedApiQuestions = apiData.results.map((q) => {
           const decodedQuestion = decodeURIComponent(q.question);
           const decodedCorrect = decodeURIComponent(q.correct_answer);
           const decodedIncorrect = q.incorrect_answers.map((ans) =>
@@ -191,8 +194,31 @@ function App() {
           };
         });
 
+        // 2. Format soal dari localStorage (Custom)
+        const rawCustomQuestions = localData ? JSON.parse(localData) : [];
+        const formattedCustomQuestions = rawCustomQuestions.map((item) => {
+          const correctAnswer = item.options[item.correctAnswerIndex];
+          const incorrectAnswers = item.options.filter(
+            (_, index) => index !== item.correctAnswerIndex,
+          );
+
+          return {
+            ...item,
+            question: item.question, // Diperbaiki dari 'questions' ke 'question'
+            correct_answer: correctAnswer,
+            incorrect_answers: incorrectAnswers,
+            shuffledAnswers: shuffleArray(item.options),
+          };
+        });
+
+        // 3. Gabungkan dan acak semua soal
+        const combinedQuestions = shuffleArray([
+          ...formattedApiQuestions,
+          ...formattedCustomQuestions,
+        ]);
+
         clearQuizSession();
-        setQuestions(formatted);
+        setQuestions(combinedQuestions); // Masukkan soal gabungan ke state
         navigate("/quiz/1");
       })
       .catch((err) => setError(err.message))

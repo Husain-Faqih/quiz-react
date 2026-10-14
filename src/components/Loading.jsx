@@ -1,5 +1,5 @@
 import loadingIcon from "../assets/loading.svg";
-import "../style/global.css";
+import "../style/Loading.css";
 
 export default function Loading() {
   return (
@@ -10,7 +10,7 @@ export default function Loading() {
         alt="Loading questions..."
       />
       <p style={{ marginTop: "12px", fontSize: "1rem" }}>
-        Loading quiz questions...
+        Loading quiz questions... 
       </p>
     </div>
   );

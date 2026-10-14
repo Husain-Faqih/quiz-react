@@ -17,7 +17,6 @@ const DIFFICULTY_OPTIONS = [
   { id: "easy", label: "Easy" },
   { id: "medium", label: "Medium" },
   { id: "hard", label: "Hard" },
-  { id: "extreme", label: "WNI" },
 ];
 
 const QUESTION_COUNTS = ["10", "20", "50"];

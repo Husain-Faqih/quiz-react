@@ -165,7 +165,7 @@ function App() {
         if (!res.ok) throw new Error("Gagal terhubung ke server OpenTDB.");
         return res.json();
       }),
-      Promise.resolve(localStorage.getItem("custom_questions")), // Perhatikan huruf kecil 'c' sesuai standar key localstorage kamu sebelumnya
+      Promise.resolve(localStorage.getItem("custom_questions")),
     ])
       .then(([apiData, localData]) => {
         if (apiData.response_code !== 0) {
@@ -194,7 +194,6 @@ function App() {
           };
         });
 
-        // 2. Format soal dari localStorage (Custom)
         const rawCustomQuestions = localData ? JSON.parse(localData) : [];
         const formattedCustomQuestions = rawCustomQuestions.map((item) => {
           const correctAnswer = item.options[item.correctAnswerIndex];
@@ -204,7 +203,7 @@ function App() {
 
           return {
             ...item,
-            question: item.question, // Diperbaiki dari 'questions' ke 'question'
+            question: item.question,
             correct_answer: correctAnswer,
             incorrect_answers: incorrectAnswers,
             shuffledAnswers: shuffleArray(item.options),
@@ -218,7 +217,7 @@ function App() {
         ]);
 
         clearQuizSession();
-        setQuestions(combinedQuestions); // Masukkan soal gabungan ke state
+        setQuestions(combinedQuestions);
         navigate("/quiz/1");
       })
       .catch((err) => setError(err.message))

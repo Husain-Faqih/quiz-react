@@ -6,7 +6,7 @@ const DEMO_QUESTIONS = [
   {
     question:
       "Logo brand teknologi manakah yang memiliki simbol buah apel tergigit?",
-    options: ["Microsoft", "Apple", "Google", "Samsung"],
+    options: ["Apple", "Microsoft", "Techno", "Samsung"],
     correct: "Apple",
   },
   {
@@ -40,10 +40,16 @@ export default function GuestHome({ onGuestStart }) {
       <header className="guest-nav">
         <img src={Logo} className="app-logo" alt="Logo Quiz" />
         <div className="nav-actions">
-          <button className="secondary-btn nav-btn" onClick={onGuestStart}>
+          <button
+            className="secondary-btn nav-btn"
+            onClick={() => alert("Comming Soon")}
+          >
             Masuk
           </button>
-          <button className="main-btn nav-btn" onClick={onGuestStart}>
+          <button
+            className="main-btn nav-btn"
+            onClick={() => alert("Comming Soon")}
+          >
             Daftar
           </button>
         </div>
@@ -57,7 +63,7 @@ export default function GuestHome({ onGuestStart }) {
         </h1>
         <p className="hero-description">
           Tebak ratusan quis dari kategori IT, Anime, Olahraga, Film, dan
-          General Knowledge. Main gratis sekarang tanpa ribet.
+          Pengetahuan Umum. Main gratis sekarang tanpa ribet.
         </p>
         <div className="hero-cta-group">
           <button className="main-btn cta-primary" onClick={onGuestStart}>
@@ -65,7 +71,7 @@ export default function GuestHome({ onGuestStart }) {
           </button>
           <button
             className="secondary-btn cta-secondary"
-            onClick={onGuestStart}
+            onClick={() => alert("Comming Soon")}
           >
             Buat Akun Gratis
           </button>
@@ -121,13 +127,13 @@ export default function GuestHome({ onGuestStart }) {
                   className="secondary-btn demo-next-btn"
                   onClick={handleNextDemo}
                 >
-                  Coba Soal Lain 🔄
+                  Coba Soal Lain
                 </button>
                 <button
                   className="main-btn demo-start-btn"
-                  onClick={onGuestStart}
+                  onClick={() => alert("Login Dulu bro!")}
                 >
-                  Mainkan Quis Lengkap 🚀
+                  Mainkan Quis Lengkap
                 </button>
               </div>
             </div>

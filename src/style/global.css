@@ -149,7 +149,7 @@ body {
 }
 
 .loading-container {
-    position: auto;
+    position: auto  ;
     top: 0;
     left: 0;
     width: 100vw;
@@ -158,6 +158,11 @@ body {
     align-items: center;
     background-color: var(--bg-main);
     color: var(--text-main);
+}
+
+.link {
+    text-decoration: none;
+    color: #f8fafc;
 }
 
 @keyframes fadeIn {

@@ -6,10 +6,10 @@ const POPULAR_CATEGORIES = [
   { id: "", name: "Semua Kategori", icon: "🌐", count: "All" },
   { id: "18", name: "Computers & IT", icon: "💻", count: "100+ Soal" },
   { id: "31", name: "Anime & Manga", icon: "🎌", count: "80+ Soal" },
-  { id: "21", name: "Sports", icon: "⚽", count: "90+ Soal" },
-  { id: "9", name: "General Knowledge", icon: "🧠", count: "150+ Soal" },
+  { id: "21", name: "Olahraga", icon: "⚽", count: "90+ Soal" },
+  { id: "9", name: "Pengetahuan Umum", icon: "🧠", count: "150+ Soal" },
   { id: "11", name: "Film & Movies", icon: "🎬", count: "110+ Soal" },
-  { id: "12", name: "Music", icon: "🎵", count: "120+ Soal" },
+  { id: "12", name: "Musik", icon: "🎵", count: "120+ Soal" },
   { id: "15", name: "Video Games", icon: "🎮", count: "140+ Soal" },
 ];
 
@@ -17,7 +17,7 @@ const DIFFICULTY_OPTIONS = [
   { id: "easy", label: "Easy" },
   { id: "medium", label: "Medium" },
   { id: "hard", label: "Hard" },
-  { id: "extreme", label: "Extreme" },
+  { id: "extreme", label: "WNI" },
 ];
 
 const QUESTION_COUNTS = ["10", "20", "50"];
@@ -45,7 +45,7 @@ export default function Dashboard({
 
       <div className="dashboard-grid">
         <div className="card stats-panel">
-          <h2 className="panel-title">Leaderboard & Score</h2>
+          <h2 className="panel-title">Papan peringkat</h2>
 
           <div className="streak-badge-box">
             <div className="streak-info">
@@ -75,13 +75,16 @@ export default function Dashboard({
               </ul>
             )}
           </div>
+          <Link to="/history" className="link">
+            Lihat Riwayat
+          </Link>
         </div>
 
         <div className="card settings-panel">
-          <h2 className="panel-title">Quiz Settings</h2>
+          <h2 className="panel-title">Pengaturan Quis</h2>
 
           <div className="setting-group">
-            <label className="setting-label">Category</label>
+            <label className="setting-label">Kategori</label>
             <select
               className="select-input"
               value={category}
@@ -96,7 +99,7 @@ export default function Dashboard({
           </div>
 
           <div className="setting-group">
-            <label className="setting-label">Difficulty</label>
+            <label className="setting-label">Kesulitan</label>
             <div className="options-grid">
               {DIFFICULTY_OPTIONS.map((diff) => (
                 <button
@@ -114,7 +117,7 @@ export default function Dashboard({
           </div>
 
           <div className="setting-group">
-            <label className="setting-label">Questions</label>
+            <label className="setting-label">Soal Quiz</label>
             <div className="options-grid">
               {QUESTION_COUNTS.map((cnt) => (
                 <button
@@ -127,14 +130,14 @@ export default function Dashboard({
                 </button>
               ))}
             </div>
-          </div>  
+          </div>
 
           <button className="main-btn start-btn" onClick={onStartQuiz}>
-            Start Quiz
+            Mulai Quiz
           </button>
           <div className="custom-soal-container">
             <Link to="/buat-soal" className="btn-custom-quiz">
-              Custom Soal
+              Buat Soal
             </Link>
 
             <Link to="/daftar-soal" className="btn-daftar-soal">
